@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 28
@@ -16,8 +16,23 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField("String", "HOST", "\"https://api.chucknorris.io/\"")
+            buildConfigField("String", "DATABASE", "\"database-release\"")
+
+            manifestPlaceholders = [allowBackup:true, fabricApiKey: "$fabricApiKey"]
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+
+            buildConfigField("String", "HOST", "\"https://api.chucknorris.io/\"")
+            buildConfigField("String", "DATABASE", "\"database-debug\"")
+
+            manifestPlaceholders = [allowBackup:false, fabricApiKey: "$fabricApiKey"]
         }
     }
 }
@@ -32,4 +47,60 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    /* Domain of application */
+    implementation project(":domain")
+
+    /* Unit test */
+    testImplementation 'junit:junit:4.12'
+    testImplementation "io.mockk:mockk:1.9.3"
+
+    /* UI test */
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation ('org.koin:koin-test:1.0.2') {
+        exclude group: 'org.mockito'
+    }
+    androidTestImplementation ('org.mockito:mockito-android:2.24.5')
+    androidTestImplementation project(":mock")
+
+    /* Koin injection dependency */
+    implementation 'org.koin:koin-android:1.0.2'
+
+    /* Roon orm local repository */
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+
+    /* Retrofit rest api client */
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+
+    /* Kotlin corotines Android*/
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0"
+
+    /* Navegation Host */
+    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
+    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0"
+
+    /* Set Font */
+    implementation 'io.github.inflationx:calligraphy3:3.0.0'
+    implementation 'io.github.inflationx:viewpump:1.0.0'
+
+    /* Barcode Zxing with the abstraction zxing-android-embedded */
+    implementation "com.journeyapps:zxing-android-embedded:3.6.0"
+
+    /* LIO SDK manager */
+    implementation 'com.cielo.lio:order-manager:0.19.8'
+
+    /* Animacoes */
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
+
+    /* Crash report*/
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+        transitive = true
+    }
 }
