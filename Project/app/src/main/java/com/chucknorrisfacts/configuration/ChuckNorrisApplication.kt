@@ -6,7 +6,6 @@ import io.fabric.sdk.android.Fabric
 import org.koin.android.ext.android.startKoin
 
 class ChuckNorrisApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
         Fabric.with(this, Crashlytics())

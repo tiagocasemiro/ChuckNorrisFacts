@@ -1,34 +1,37 @@
 package com.chucknorrisfacts.configuration
 
 import android.arch.persistence.room.Room
-import cielo.sdk.info.InfoManager
 import com.chucknorrisfacts.BuildConfig
-import com.google.gson.GsonBuilder
+import com.chucknorrisfacts.controller.FactsController
+import com.chucknorrisfacts.controller.SearchController
+import com.chucknorrisfacts.model.repository.local.ApplicationDatabase
+import com.chucknorrisfacts.model.repository.remote.ClientApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 val controllersModule = module {
     factory {
-
+        FactsController()
+    }
+    factory {
+        SearchController()
     }
 }
 
 val databaseModule = module {
     single {
-       /* Room.databaseBuilder(get(), ApplicationDatabase::class.java, BuildConfig.DATABASE)
+        Room.databaseBuilder(get(), ApplicationDatabase::class.java, BuildConfig.DATABASE)
             .allowMainThreadQueries()
-            .build()*/
+            .build()
     }
     single {
-       // get<ApplicationDatabase>().paymentDao()
+        get<ApplicationDatabase>().categoryDao()
     }
     single {
-        //get<ApplicationDatabase>().cancellationDao()
+        get<ApplicationDatabase>().searchedDao()
     }
 }
 
@@ -36,16 +39,9 @@ val clientApiModule = module {
     factory {
         Retrofit.Builder()
             .baseUrl(BuildConfig.HOST)
-            .addConverterFactory(
-                GsonConverterFactory.create(
-                    GsonBuilder()
-                        .setDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                        .create()))
             .client(
                 OkHttpClient.Builder()
-                    .readTimeout(5000, TimeUnit.MILLISECONDS)
                     .connectTimeout(5000, TimeUnit.MILLISECONDS)
-                    .writeTimeout(5000, TimeUnit.MILLISECONDS)
                     .addInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
                             message -> "CHUCK NORRIS LOG -> $message"
                     }).setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -53,6 +49,6 @@ val clientApiModule = module {
             .build()
     }
     factory {
-       // get<Retrofit>().create(ClientApi::class.java)
+        get<Retrofit>().create(ClientApi::class.java)
     }
 }
