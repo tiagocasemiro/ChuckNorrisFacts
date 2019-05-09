@@ -34,6 +34,7 @@ android {
 
             manifestPlaceholders = [allowBackup:false, fabricApiKey: "$fabricApiKey"]
         }
+
     }
 }
 
@@ -78,28 +79,18 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
 
-    /* Kotlin corotines Android*/
+    /* Kotlin corotines Android */
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0"
 
     /* Navegation Host */
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
     implementation "android.arch.navigation:navigation-ui-ktx:1.0.0"
 
-    /* Set Font */
-    implementation 'io.github.inflationx:calligraphy3:3.0.0'
-    implementation 'io.github.inflationx:viewpump:1.0.0'
-
-    /* Barcode Zxing with the abstraction zxing-android-embedded */
-    implementation "com.journeyapps:zxing-android-embedded:3.6.0"
-
-    /* LIO SDK manager */
-    implementation 'com.cielo.lio:order-manager:0.19.8'
-
     /* Animacoes */
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
 
-    /* Crash report*/
+    /* Crash report */
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
