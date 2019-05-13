@@ -6,6 +6,11 @@ targetCompatibility = "7"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    /* kotlin */
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    /* Mock Server */
+    implementation 'com.squareup.okhttp:mockwebserver:2.7.5'
 }
 
