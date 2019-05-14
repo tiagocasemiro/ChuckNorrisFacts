@@ -47,6 +47,26 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
         }
     }
 
+    fun categoriesFromDatabase() : List<Category> {
+        return try {
+            categoryDao.all()
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            emptyList()
+        }
+    }
+
+    fun searchedsFromDatabase() : List<Searched> {
+        return try {
+            searchedDao.all()
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            emptyList()
+        }
+    }
+
     private fun save(categories: List<Category>) = GlobalScope.async(Dispatchers.IO) {
         try {
             categories.forEach {
@@ -62,26 +82,6 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
             searchedDao.add(Searched(query))
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-    }
-
-    private fun allCategories() : List<Category> {
-        return try {
-            categoryDao.all()
-        } catch (e: Exception) {
-            e.printStackTrace()
-
-            emptyList()
-        }
-    }
-
-    private fun allSearched() : List<Searched> {
-        return try {
-            searchedDao.all()
-        } catch (e: Exception) {
-            e.printStackTrace()
-
-            emptyList()
         }
     }
 }
