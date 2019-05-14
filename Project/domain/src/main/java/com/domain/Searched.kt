@@ -5,9 +5,8 @@ import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.Expose
 
 @Entity
-class Searched {
+class Searched(var query: String? = null) {
     @Expose(serialize = false, deserialize = false)
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
-    var term: String? = null
 }
