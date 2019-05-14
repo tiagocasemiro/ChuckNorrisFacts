@@ -15,12 +15,12 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
     fun categories() = GlobalScope.async(Dispatchers.IO) {
         try {
             val response = clientApi.categories().execute()
-
-            if (response.isSuccessful)
+            if (response.isSuccessful) {
+                save(response.body()!!)
                 return@async response.body()!!
-             else
+            } else {
                 return@async NoResultException()
-
+            }
         } catch (exception: Exception) {
 
             return@async exception
@@ -33,12 +33,11 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
     fun searchWith(query: String)  = GlobalScope.async(Dispatchers.IO) {
         try {
             val response = clientApi.search(query).execute()
-
+            save(query)
             if (response.isSuccessful)
                 return@async response.body()!!
             else
                 return@async Gson().toJson(emptyList<Category>())
-
         } catch (exception: Exception) {
 
             return@async exception
@@ -48,15 +47,17 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
         }
     }
 
-    private fun save(category: Category) {
+    private fun save(categories: List<Category>) = GlobalScope.async(Dispatchers.IO) {
         try {
-            categoryDao.add(category)
+            categories.forEach {
+                categoryDao.add(it)
+            }
         } catch (e: Exception) {
            e.printStackTrace()
         }
     }
 
-    private fun save(query: String) {
+    private fun save(query: String) = GlobalScope.async(Dispatchers.IO) {
         try {
             searchedDao.add(Searched(query))
         } catch (e: Exception) {

@@ -2,7 +2,6 @@ package com.chucknorrisfacts.configuration
 
 import android.arch.persistence.room.Room
 import com.chucknorrisfacts.BuildConfig
-import com.chucknorrisfacts.controller.FactsController
 import com.chucknorrisfacts.controller.SearchController
 import com.chucknorrisfacts.model.repository.local.ApplicationDatabase
 import com.chucknorrisfacts.model.repository.remote.ClientApi
@@ -14,10 +13,7 @@ import java.util.concurrent.TimeUnit
 
 val controllersModule = module {
     factory {
-        FactsController()
-    }
-    factory {
-        SearchController()
+        SearchController(get<Retrofit>().create(ClientApi::class.java), get<ApplicationDatabase>().searchedDao(), get<ApplicationDatabase>().categoryDao())
     }
 }
 
