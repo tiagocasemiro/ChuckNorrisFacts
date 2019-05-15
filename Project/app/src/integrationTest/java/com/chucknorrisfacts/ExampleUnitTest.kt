@@ -1,4 +1,4 @@
-package com.chucknorrisfacts
+package java.com.chucknorrisfacts
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

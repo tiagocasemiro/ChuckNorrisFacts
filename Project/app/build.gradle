@@ -34,7 +34,11 @@ android {
 
             manifestPlaceholders = [allowBackup:false, fabricApiKey: "$fabricApiKey"]
         }
-
+    }
+    sourceSets {
+        test {
+            java.srcDirs += "$projectDir/src/integrationTest/java"
+        }
     }
 }
 
