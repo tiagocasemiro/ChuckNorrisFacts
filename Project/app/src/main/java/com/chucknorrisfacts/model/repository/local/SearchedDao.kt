@@ -1,7 +1,6 @@
 package com.chucknorrisfacts.model.repository.local
 
 import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import com.domain.Searched
@@ -10,9 +9,6 @@ import com.domain.Searched
 interface SearchedDao {
     @Insert
     fun add(vararg searched: Searched)
-
-    @Delete
-    fun delete(vararg searched: Searched)
 
     @Query("SELECT * FROM searched")
     fun all(): List<Searched>
