@@ -12,5 +12,11 @@ dependencies {
 
     /* Mock Server */
     implementation 'com.squareup.okhttp:mockwebserver:2.7.5'
+
+    /* Json serializer */
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    /* Domain of application */
+    implementation project(":domain")
 }
 

@@ -1,4 +1,4 @@
-package com.example.mock
+package com.mock
 
 import com.squareup.okhttp.internal.Internal.logger
 import com.squareup.okhttp.mockwebserver.MockWebServer
@@ -20,19 +20,18 @@ class MockServer() {
                 .addHeader("Content-Type", "application/json; charset=utf-8")
                 .addHeader("Cache-Control", "no-cache")
 
-                when(request!!.path!!) {
-                    "/jokes/search" -> {
-                        mockResponse.setBody(json.search())
-                        mockResponse.setResponseCode(200)
-                    }
-                    "/jokes/categories" -> {
-                        mockResponse.setBody(json.categories())
-                        mockResponse.setResponseCode(200)
-                    }
-                    else -> {
-                        mockResponse.setResponseCode(404)
-                    }
+            when {
+                request!!.path!!.contains("/jokes/search") -> {
+                    mockResponse.setBody(json.search())
+                    mockResponse.setResponseCode(200)
                 }
+                request.path!!.contains("/jokes/categories") -> {
+                    mockResponse.setBody(json.categories())
+                    mockResponse.setResponseCode(200)
+
+                }
+                else -> mockResponse.setResponseCode(404)
+            }
 
             return mockResponse
         }
