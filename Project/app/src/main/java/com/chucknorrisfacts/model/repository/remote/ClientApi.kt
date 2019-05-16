@@ -10,5 +10,5 @@ interface ClientApi {
     fun search(@Path("query") query: String): Call<List<Fact>>
 
     @GET("https://api.chucknorris.io/jokes/categories")
-    fun categories(): Call<List<Category>>
+    fun categories(): Call<List<String>>
 }
