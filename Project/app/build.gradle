@@ -36,7 +36,7 @@ android {
         }
     }
     sourceSets {
-        test {
+        androidTest {
             java.srcDirs += "$projectDir/src/integrationTest/java"
         }
     }
