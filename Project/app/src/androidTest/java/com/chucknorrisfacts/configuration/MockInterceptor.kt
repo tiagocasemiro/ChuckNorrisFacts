@@ -9,9 +9,7 @@ import okhttp3.ResponseBody
 class MockInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         val mediaJson = MediaType.parse("application/json")
-        val request = chain.request()
-        val path = request.url().encodedPath()
-
+        val path = chain.request().url().encodedPath()
         var code = 200
         val json = StringBuilder()
         val responseJson = ResponseJson()
