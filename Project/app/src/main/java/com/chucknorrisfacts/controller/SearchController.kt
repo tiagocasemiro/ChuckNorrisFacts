@@ -18,7 +18,7 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
             val objectReturned = categoriesFromRemoteApi().await()
             when (objectReturned) {
                 is List<*> -> {
-                    this@SearchController.save(objectReturned)
+                    this@SearchController.saveOnDatabase(objectReturned)
                     success(objectReturned.map { Category(it as String) }.toList())
                 }
                 else -> {
@@ -85,7 +85,7 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
     private fun searchWithQueryFromRemoteApi(query: String) = GlobalScope.async(Dispatchers.IO) {
         try {
             val response = clientApi.search(query).execute()
-            save(query)
+            this@SearchController.saveOnDatabase(query)
             if (response.isSuccessful)
                 return@async response.body()!!
             else
@@ -115,7 +115,7 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
         }
     }
 
-    private fun save(categories: List<*>) = GlobalScope.async(Dispatchers.IO) {
+    private fun saveOnDatabase(categories: List<*>) = GlobalScope.async(Dispatchers.IO) {
         try {
             categories.forEach {
                 categoryDao.add(Category(it as String))
@@ -125,7 +125,7 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
         }
     }
 
-    private fun save(query: String) = GlobalScope.async(Dispatchers.IO) {
+    private fun saveOnDatabase(query: String) = GlobalScope.async(Dispatchers.IO) {
         try {
             searchedDao.add(Searched(query))
         } catch (e: Exception) {
