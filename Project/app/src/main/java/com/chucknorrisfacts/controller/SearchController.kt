@@ -38,6 +38,7 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
     fun searchWith(query: String, success: (facts: List<Fact>) -> Unit, fail: (exception: Exception) -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
             val objectReturned = searchWithQueryFromRemoteApi(query).await()
+            this@SearchController.saveOnDatabase(query)
             when (objectReturned) {
                 is List<*> -> {
                     success(objectReturned.map { it as Fact }.toList())
@@ -85,7 +86,6 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
     private fun searchWithQueryFromRemoteApi(query: String) = GlobalScope.async(Dispatchers.IO) {
         try {
             val response = clientApi.search(query).execute()
-            this@SearchController.saveOnDatabase(query)
             if (response.isSuccessful)
                 return@async response.body()!!
             else
