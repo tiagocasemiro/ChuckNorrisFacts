@@ -12,16 +12,17 @@ class FactDeserialize : JsonDeserializer<Fact> {
 
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): Fact {
         val jsonObject = json?.asJsonObject
-
+        val category = Category()
         val fact = Fact()
         fact.value = jsonObject?.get("value")?.asString
         fact.url = jsonObject?.get("url")?.asString
         fact.hash = jsonObject?.get("id")?.asString
         fact.icon = jsonObject?.get("icon_url")?.asString
-
-        val category = Category()
-        category.name = jsonObject?.get("category")?.asString
-
+        category.name = jsonObject?.get("category")?.let {
+            if (it.isJsonNull) "uncategorized" else it.asString
+        }?: run {
+            "uncategorized"
+        }
         fact.category = category
 
         return fact
