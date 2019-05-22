@@ -1,9 +1,9 @@
 package com.chucknorrisfacts.model.repository.remote
 
-import com.domain.Category
 import com.domain.Fact
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface ClientApi {
     @GET("https://api.chucknorris.io/jokes/search?query={query}")
