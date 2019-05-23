@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/host"
-            app:startDestination="@id/factsFragment">
-
-    <fragment android:id="@+id/factsFragment" android:name="com.chucknorrisfacts.view.FactsFragment"
-              android:label="fragment_facts" tools:layout="@layout/fragment_facts">
-        <action android:id="@+id/action_factsFragment_to_searchFragment" app:destination="@id/searchFragment"/>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/host"
+    app:startDestination="@id/factsFragment">
+    <fragment
+        android:id="@+id/factsFragment"
+        android:name="com.chucknorrisfacts.view.FactsFragment"
+        tools:layout="@layout/fragment_facts">
+        <action
+            android:id="@+id/action_factsFragment_to_searchFragment"
+            app:destination="@id/searchFragment"/>
     </fragment>
-    <fragment android:id="@+id/searchFragment" android:name="com.chucknorrisfacts.view.SearchFragment"
-              android:label="fragment_search" tools:layout="@layout/fragment_search"/>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.chucknorrisfacts.view.SearchFragment"
+        tools:layout="@layout/fragment_search"/>
 </navigation>

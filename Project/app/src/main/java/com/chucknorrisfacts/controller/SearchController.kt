@@ -6,7 +6,7 @@ import com.chucknorrisfacts.model.repository.local.CategoryDao
 import com.chucknorrisfacts.model.repository.local.SearchedDao
 import com.chucknorrisfacts.model.repository.remote.ClientApi
 import com.domain.Category
-import com.domain.Fact
+import com.domain.Search
 import com.domain.Searched
 import com.google.gson.Gson
 import kotlinx.coroutines.*
@@ -35,13 +35,13 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
         }
     }
 
-    fun searchWith(query: String, success: (facts: List<Fact>) -> Unit, fail: (exception: Exception) -> Unit) = GlobalScope.launch {
+    fun searchWith(query: String, success: (search: Search) -> Unit, fail: (exception: Exception) -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
             val objectReturned = searchWithQueryFromRemoteApi(query).await()
             this@SearchController.saveOnDatabase(query)
             when (objectReturned) {
-                is List<*> -> {
-                    success(objectReturned.map { it as Fact }.toList())
+                is Search -> {
+                    success(objectReturned)
                 }
                 else -> {
                     when (objectReturned) {
@@ -56,7 +56,7 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
 
     fun searcheds(success: (facts: List<Searched>) -> Unit, fail: (exception: Exception) -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
-            val objectReturned = searchedsFromDatabase()
+            val objectReturned = searchedsFromDatabase().await()
             when (objectReturned) {
                 is List<*> -> {
                     success(objectReturned.map { it as Searched }.toList())
