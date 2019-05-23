@@ -1,15 +1,12 @@
 package com.chucknorrisfacts.controller
 
-import com.chucknorrisfacts.model.repository.exception.ExpectedException
-import com.chucknorrisfacts.model.repository.exception.HttpException
-import com.chucknorrisfacts.model.repository.exception.NoResultException
+import com.chucknorrisfacts.model.repository.exception.NoSuccessException
 import com.chucknorrisfacts.model.repository.local.CategoryDao
 import com.chucknorrisfacts.model.repository.local.SearchedDao
 import com.chucknorrisfacts.model.repository.remote.ClientApi
 import com.domain.Category
 import com.domain.Search
 import com.domain.Searched
-import com.google.gson.Gson
 import kotlinx.coroutines.*
 
 class SearchController(private val clientApi: ClientApi, private val searchedDao: SearchedDao, private val categoryDao: CategoryDao) {
@@ -65,12 +62,11 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
     private fun categoriesFromRemoteApi() = GlobalScope.async(Dispatchers.IO) {
         try {
             val response = clientApi.categories().execute()
-            if (response.isSuccessful) {
+            if (response.isSuccessful)
                 return@async response.body()!!
-            } else {
-                return@async NoResultException()
-            }
-        } catch (exception: Exception) {
+             else
+                throw NoSuccessException()
+        } catch (exception: NoSuccessException) {
             return@async exception
         } catch (throwable: Throwable) {
             return@async Exception(throwable)
@@ -83,8 +79,8 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
             if (response.isSuccessful)
                 return@async response.body()!!
             else
-                return@async Gson().toJson(emptyList<Category>())
-        } catch (exception: Exception) {
+                throw NoSuccessException()
+        } catch (exception: NoSuccessException) {
             return@async exception
         } catch (throwable: Throwable) {
             return@async Exception(throwable)
