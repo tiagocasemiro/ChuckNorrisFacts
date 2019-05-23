@@ -1,6 +1,6 @@
 package com.chucknorrisfacts.controller
 
-import com.chucknorrisfacts.model.repository.exception.NoSuccessException
+import com.chucknorrisfacts.model.exception.NoSuccessException
 import com.chucknorrisfacts.model.repository.local.CategoryDao
 import com.chucknorrisfacts.model.repository.local.SearchedDao
 import com.chucknorrisfacts.model.repository.remote.ClientApi
