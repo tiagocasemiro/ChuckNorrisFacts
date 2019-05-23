@@ -1,4 +1,4 @@
-package com.chucknorrisfacts.model.repository.exception
+package com.chucknorrisfacts.model.exception
 
 class NoSuccessException : Exception()
 class HttpException : Exception()
