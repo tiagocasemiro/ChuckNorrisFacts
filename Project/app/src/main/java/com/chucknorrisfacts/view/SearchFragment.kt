@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chucknorrisfacts.R
+import com.chucknorrisfacts.configuration.isConnected
 import com.chucknorrisfacts.controller.SearchController
 import com.domain.Category
 import com.domain.Search
@@ -15,8 +16,7 @@ import org.koin.android.ext.android.inject
 
 class SearchFragment : Fragment() {
 
-    val searchController: SearchController by inject()
-
+    private val searchController: SearchController by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -32,41 +32,35 @@ class SearchFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.title = ""
 
-        searchController.categories({
-            loadCategories(it)
-        }, {
-            fail(it)
-        })
-
-       searchController.searchWith("car", {
-            loadFacts(it)
-        }, {
-            fail(it)
-        })
-
-        searchController.searcheds({
-            loadSearcheds(it)
-        }, {
-            fail(it)
-        })
-
+        isConnected(noConnection)
+        searchController.categories(loadCategories, failToLoadData)
+        searchController.searchWith("car", loadFacts, failToLoadData)
+        searchController.searcheds(loadSearcheds, noResult)
 
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
-    private fun loadSearcheds(searcheds: List<Searched>) {
-        System.out.println(searcheds.size)
+    private val loadSearcheds : (searcheds: List<Searched>) -> Unit = { searcheds ->
+
     }
 
-    private fun loadFacts(search: Search) {
-        System.out.println(search.total)
+    private val loadFacts : (search: Search) -> Unit = { search ->
+
     }
 
-    private fun loadCategories(categories: List<Category>) {
-        System.out.println(categories.size)
+    private val loadCategories : (categories: List<Category>) -> Unit = { categories ->
+
     }
 
-    private fun fail(exception: Exception) {
-        exception.printStackTrace()
+    private val failToLoadData : () -> Unit = {
+
+    }
+
+    private val noConnection : () -> Unit = {
+
+    }
+
+    private val noResult : () -> Unit = {
+
     }
 }

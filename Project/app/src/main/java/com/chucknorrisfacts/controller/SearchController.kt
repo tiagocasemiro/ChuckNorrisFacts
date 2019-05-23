@@ -1,6 +1,7 @@
 package com.chucknorrisfacts.controller
 
 import com.chucknorrisfacts.model.repository.exception.ExpectedException
+import com.chucknorrisfacts.model.repository.exception.HttpException
 import com.chucknorrisfacts.model.repository.exception.NoResultException
 import com.chucknorrisfacts.model.repository.local.CategoryDao
 import com.chucknorrisfacts.model.repository.local.SearchedDao
@@ -13,7 +14,7 @@ import kotlinx.coroutines.*
 
 class SearchController(private val clientApi: ClientApi, private val searchedDao: SearchedDao, private val categoryDao: CategoryDao) {
 
-    fun categories(success: (categories: List<Category>) -> Unit, fail: (exception: Exception) -> Unit) = GlobalScope.launch {
+    fun categories(success: (categories: List<Category>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
             val objectReturned = categoriesFromRemoteApi().await()
             when (objectReturned) {
@@ -22,12 +23,11 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
                     success(objectReturned.map { Category(it as String) }.toList())
                 }
                 else -> {
-                    categoriesFromDatabase().let {
-                        when (objectReturned) {
-                            is List<*> -> { success((it as List<*>).map { it as Category }.toList()) }
-                            is NoResultException -> { fail(objectReturned) }
-                            is Exception -> { fail(objectReturned) }
-                            else -> { fail(ExpectedException()) }
+                    categoriesFromDatabase().await().let {
+                        if(it is List<*>) {
+                            success((it).map { it as Category }.toList())
+                        } else {
+                            fail()
                         }
                     }
                 }
@@ -35,34 +35,28 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
         }
     }
 
-    fun searchWith(query: String, success: (search: Search) -> Unit, fail: (exception: Exception) -> Unit) = GlobalScope.launch {
+    fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
             val objectReturned = searchWithQueryFromRemoteApi(query).await()
             this@SearchController.saveOnDatabase(query)
             when (objectReturned) {
                 is Search -> {
                     success(objectReturned)
-                }
-                else -> {
-                    when (objectReturned) {
-                        is NoResultException -> { fail(objectReturned) }
-                        is Exception -> { fail(objectReturned) }
-                        else -> { fail(ExpectedException()) }
-                    }
+                } else -> {
+                    fail()
                 }
             }
         }
     }
 
-    fun searcheds(success: (facts: List<Searched>) -> Unit, fail: (exception: Exception) -> Unit) = GlobalScope.launch {
+    fun searcheds(success: (facts: List<Searched>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
             val objectReturned = searchedsFromDatabase().await()
             when (objectReturned) {
                 is List<*> -> {
                     success(objectReturned.map { it as Searched }.toList())
-                }
-                else -> {
-                    fail(objectReturned as Exception)
+                } else -> {
+                    fail()
                 }
             }
         }
