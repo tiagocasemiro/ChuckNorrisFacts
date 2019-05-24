@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="aguarde">Aguarde...</string>
     <string name="hint_search">Enter your search term</string>
+    <string name="search_suggestions">Suggestions</string>
+    <string name="search_past_searches">Past Searches</string>
 </resources>
