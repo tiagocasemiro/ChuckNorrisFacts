@@ -1,6 +1,6 @@
 package com.chucknorrisfacts.configuration
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.chucknorrisfacts.BuildConfig
 import com.chucknorrisfacts.controller.SearchController
 import com.chucknorrisfacts.model.repository.local.ApplicationDatabase

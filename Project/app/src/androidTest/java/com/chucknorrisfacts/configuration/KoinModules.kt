@@ -1,7 +1,7 @@
 package com.chucknorrisfacts.configuration
 
-import android.arch.persistence.room.Room
-import android.support.test.InstrumentationRegistry
+import androidx.room.Room
+import androidx.test.InstrumentationRegistry
 import com.chucknorrisfacts.BuildConfig
 import com.chucknorrisfacts.model.repository.local.ApplicationDatabase
 import com.chucknorrisfacts.model.repository.remote.ClientApi

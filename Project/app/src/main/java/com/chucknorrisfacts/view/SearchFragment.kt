@@ -1,8 +1,8 @@
 package com.chucknorrisfacts.view
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,12 +30,12 @@ class SearchFragment : Fragment() {
         //https://github.com/google/flexbox-layout
 
 
-        (activity as AppCompatActivity).supportActionBar?.title = ""
+       // (activity as AppCompatActivity).supportActionBar?.title = ""
 
-        isConnected(noConnection)
-        searchController.categories(loadCategories, failToLoadData)
-        searchController.searchWith("car", loadFacts, failToLoadData)
-        searchController.searcheds(loadSearcheds, noResult)
+      //  isConnected(noConnection)
+       // searchController.categories(loadCategories, failToLoadData)
+       // searchController.searchWith("car", loadFacts, failToLoadData)
+        //searchController.searcheds(loadSearcheds, noResult)
 
         return inflater.inflate(R.layout.fragment_search, container, false)
     }

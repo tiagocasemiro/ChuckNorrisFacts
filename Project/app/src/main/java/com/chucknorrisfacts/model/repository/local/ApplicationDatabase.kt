@@ -1,7 +1,7 @@
 package com.chucknorrisfacts.model.repository.local
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import com.domain.Category
 import com.domain.Searched
 
