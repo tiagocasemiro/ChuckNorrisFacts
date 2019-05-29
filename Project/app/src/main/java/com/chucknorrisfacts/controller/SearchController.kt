@@ -8,24 +8,42 @@ import com.domain.Category
 import com.domain.Search
 import com.domain.Searched
 import kotlinx.coroutines.*
+import java.util.*
 
 class SearchController(private val clientApi: ClientApi, private val searchedDao: SearchedDao, private val categoryDao: CategoryDao) {
 
     fun categories(success: (categories: List<Category>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
-            val objectReturned = categoriesFromRemoteApi().await()
-            when (objectReturned) {
+            var categories: List<Category>? = null
+
+            categoriesFromDatabase().await().let {
+                if(it is List<*>) {
+                    categories = (it).map { it as Category }.toList()
+                    categories?.let {list ->
+                        if(list.isNotEmpty()) {
+                            categories = list.shuffled()
+                            if(categories!!.size > 8)
+                                categories = categories!!.slice(0..7)
+                            success(categories!!)
+                        }
+                    }
+                }
+            }
+
+            when (val objectReturned = categoriesFromRemoteApi().await()) {
                 is List<*> -> {
                     this@SearchController.saveOnDatabase(objectReturned)
-                    success(objectReturned.map { Category(it as String) }.toList())
+                    if(categories == null || categories!!.isEmpty()) {
+                        categories = objectReturned.map { Category(it as String) }.toList()
+                        categories = categories!!.shuffled()
+                        if(categories!!.size > 8)
+                            categories = categories!!.slice(0..7)
+                        success(categories!!)
+                    }
                 }
                 else -> {
-                    categoriesFromDatabase().await().let {
-                        if(it is List<*>) {
-                            success((it).map { it as Category }.toList())
-                        } else {
-                            fail()
-                        }
+                    if(categories == null) {
+                        fail()
                     }
                 }
             }
@@ -34,22 +52,35 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
 
     fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
-            val objectReturned = searchWithQueryFromRemoteApi(query).await()
             this@SearchController.saveOnDatabase(query)
-            when (objectReturned) {
+            when (val objectReturned = searchWithQueryFromRemoteApi(query).await()) {
                 is Search -> {
                     success(objectReturned)
                 } else -> {
-                    fail()
-                }
+                fail()
+            }
+            }
+        }
+    }
+
+    fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit, successSearcheds : (searcheds: List<Searched>) -> Unit, noResultSearcheds : () -> Unit) = GlobalScope.launch {
+        this@SearchController.searchWith(query, success, fail)
+        withContext(Dispatchers.Main) {
+            when (val objectReturned = searchedsFromDatabase().await()) {
+                is List<*> -> {
+                    val searcheds = objectReturned.map { it as Searched }.toMutableList()
+                    searcheds.add(Searched(query))
+                    successSearcheds(searcheds)
+                } else -> {
+                noResultSearcheds()
+            }
             }
         }
     }
 
     fun searcheds(success: (facts: List<Searched>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
-            val objectReturned = searchedsFromDatabase().await()
-            when (objectReturned) {
+            when (val objectReturned = searchedsFromDatabase().await()) {
                 is List<*> -> {
                     success(objectReturned.map { it as Searched }.toList())
                 } else -> {

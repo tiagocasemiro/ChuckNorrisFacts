@@ -6,4 +6,5 @@
     <string name="hint_search">Enter your search term</string>
     <string name="search_suggestions">Suggestions</string>
     <string name="search_past_searches">Past Searches</string>
+    <string name="search_title">SEARCH FACTS</string>
 </resources>
