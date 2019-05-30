@@ -1,8 +1,9 @@
 package com.domain
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class Fact {
+class Fact : Serializable{
     var category: Category? = null
     @SerializedName("icon_url")
     var icon: String? = null

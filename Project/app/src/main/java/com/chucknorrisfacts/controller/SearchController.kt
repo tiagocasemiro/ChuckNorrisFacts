@@ -8,7 +8,6 @@ import com.domain.Category
 import com.domain.Search
 import com.domain.Searched
 import kotlinx.coroutines.*
-import java.util.*
 
 class SearchController(private val clientApi: ClientApi, private val searchedDao: SearchedDao, private val categoryDao: CategoryDao) {
 

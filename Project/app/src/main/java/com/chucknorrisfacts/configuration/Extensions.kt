@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 
 fun Activity.hideKeyboard() {
     (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(window.decorView.windowToken, 0)
@@ -20,4 +21,8 @@ fun Fragment.isConnected(noConnection : () -> Unit) {
     }?: run {
             noConnection()
     }
+}
+
+fun Fragment.hideBackNavegation() {
+    (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 }

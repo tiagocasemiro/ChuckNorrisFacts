@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.chucknorrisfacts.R
 import com.chucknorrisfacts.configuration.isConnected
 import com.chucknorrisfacts.controller.SearchController
@@ -31,9 +31,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(com.chucknorrisfacts.R.layout.fragment_search, container, false)
-
-        (activity as AppCompatActivity).supportActionBar?.title = getString(com.chucknorrisfacts.R.string.search_title)
+        val view = inflater.inflate(R.layout.fragment_search, container, false)
 
         isConnected(noConnection)
         searchController.categories(loadCategories, failToLoadData)
@@ -70,9 +68,12 @@ class SearchFragment : Fragment() {
     }
 
     private val loadFacts : (search: Search) -> Unit = { search ->
-        //TODO implement
+        val arguments = Bundle().apply {
+            putSerializable(Search::class.java.canonicalName, search)
+        }
+        (activity!! as MainActivity).intent?.putExtras(arguments)
         load.hide()
-        Toast.makeText(context, search.total.toString(), Toast.LENGTH_SHORT).show()
+        view?.findNavController()?.popBackStack()
     }
 
     private val loadCategories : (categories: List<Category>) -> Unit = { categories ->
