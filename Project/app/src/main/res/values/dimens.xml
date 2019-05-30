@@ -1,3 +1,5 @@
 <resources>
     <dimen name="paddin_defaut">16dp</dimen>
+    <dimen name="font_size_large">12sp</dimen>
+    <dimen name="font_size_small">10sp</dimen>
 </resources>

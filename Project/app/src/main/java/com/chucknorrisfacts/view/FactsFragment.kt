@@ -15,13 +15,13 @@ class FactsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.fragment_facts, container, false)
         hideBackNavegation()
-        view.click.setOnClickListener {
+        view.search.setOnClickListener {
             view.findNavController().navigate(R.id.action_factsFragment_to_searchFragment)
         }
         (activity!! as MainActivity).intent?.extras?.let { bundle ->
             if(bundle.containsKey(Search::class.java.canonicalName)) {
                 val search = bundle.getSerializable(Search::class.java.canonicalName)!! as Search
-
+                view.facts.adapter = FactsAdapter(search)
             }
         }
 

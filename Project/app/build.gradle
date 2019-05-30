@@ -84,7 +84,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
 
     /* Kotlin corotines Android */
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
 
     /* Navegation Host */
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-alpha04'
