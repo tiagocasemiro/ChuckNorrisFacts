@@ -31,9 +31,9 @@ class FactsAdapter(val search: Search): RecyclerView.Adapter<FactViewHolder>() {
         holder.category.text = search.result?.get(position)?.category?.name
         holder.description.text = search.result?.get(position)?.value
         if(search.result?.get(position)?.value?.length!! > limitToChangeFont) {
-            holder.description.setTextSize(TypedValue.COMPLEX_UNIT_SP, holder.itemView.context.resources.getDimension(R.dimen.font_size_large))
-        } else {
             holder.description.setTextSize(TypedValue.COMPLEX_UNIT_SP, holder.itemView.context.resources.getDimension(R.dimen.font_size_small))
+        } else {
+            holder.description.setTextSize(TypedValue.COMPLEX_UNIT_SP, holder.itemView.context.resources.getDimension(R.dimen.font_size_large))
         }
         holder.share.setOnClickListener{
             try {

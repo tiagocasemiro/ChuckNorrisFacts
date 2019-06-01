@@ -51,19 +51,18 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
 
     fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
-            this@SearchController.saveOnDatabase(query)
             when (val objectReturned = searchWithQueryFromRemoteApi(query).await()) {
                 is Search -> {
                     success(objectReturned)
                 } else -> {
-                fail()
+                    fail()
+                }
             }
-            }
+            this@SearchController.saveOnDatabase(query)
         }
     }
 
     fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit, successSearcheds : (searcheds: List<Searched>) -> Unit, noResultSearcheds : () -> Unit) = GlobalScope.launch {
-        this@SearchController.searchWith(query, success, fail)
         withContext(Dispatchers.Main) {
             when (val objectReturned = searchedsFromDatabase().await()) {
                 is List<*> -> {
@@ -71,10 +70,11 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
                     searcheds.add(Searched(query))
                     successSearcheds(searcheds)
                 } else -> {
-                noResultSearcheds()
-            }
+                    noResultSearcheds()
+                }
             }
         }
+        this@SearchController.searchWith(query, success, fail)
     }
 
     fun searcheds(success: (facts: List<Searched>) -> Unit, fail: () -> Unit) = GlobalScope.launch {

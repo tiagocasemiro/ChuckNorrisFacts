@@ -94,15 +94,15 @@ class SearchFragment : Fragment() {
     }
 
     private val failToLoadData : () -> Unit = {
-
+        load.hide()
     }
 
     private val noConnection : () -> Unit = {
-
+        load.hide()
     }
 
     private val noResult : () -> Unit = {
-
+        load.hide()
     }
 
 
