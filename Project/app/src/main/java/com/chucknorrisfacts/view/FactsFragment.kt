@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_facts.view.*
 class FactsFragment : Fragment() {
     private var state = State.VISIBLE
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.fragment_facts, container, false)
         hideBackNavegation()
