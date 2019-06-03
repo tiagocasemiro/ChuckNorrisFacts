@@ -8,4 +8,10 @@
     <string name="search_past_searches">Past Searches</string>
     <string name="search_title">SEARCH FACTS</string>
     <string name="facts_title">CHUCK NORRIS FACTS</string>
+    <string name="message_no_connection">No internet connection</string>
+    <string name="message_fail_load_data">Failed to load data</string>
+    <string name="message_required_field">Required field</string>
+    <string name="buuton_close">CLOSE</string>
+    <string name="message_no_result">If no result 😓 take a \' Roundhouse Kick ´ on your dismay 👊 and try again 😅
+    </string>
 </resources>

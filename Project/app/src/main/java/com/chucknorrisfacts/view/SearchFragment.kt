@@ -2,17 +2,22 @@ package com.chucknorrisfacts.view
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.chucknorrisfacts.R
 import com.chucknorrisfacts.configuration.isConnected
 import com.chucknorrisfacts.controller.SearchController
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.domain.Category
 import com.domain.Search
 import com.domain.Searched
@@ -32,14 +37,31 @@ class SearchFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
-        isConnected(noConnection)
         searchController.categories(loadCategories, failToLoadData)
         searchController.searcheds(loadSearcheds, noResult)
 
+        view?.query?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                view.queryInputLayout.error = null
+            }
+        })
+
         view?.query?.setOnEditorActionListener { query, actionId, event ->
-            if(actionId == EditorInfo.IME_ACTION_DONE){
-                searchController.searchWith(query.text.toString(), loadFacts, failToLoadData, loadSearcheds, noResult)
-                load.show()
+            if(actionId == EditorInfo.IME_ACTION_DONE) {
+                view.queryInputLayout.error = null
+                if(isConnected(noConnection)) {
+                    if(view.query.text.toString().isNotEmpty()) {
+                        searchController.searchWith(
+                            view.query.text.toString(),loadFacts, failToLoadData, loadSearcheds, noResult
+                        )
+                        load.show()
+                    } else {
+                        YoYo.with(Techniques.Shake).duration(350).playOn(view.queryInputLayout)
+                        view.queryInputLayout.error = context!!.getString(R.string.message_required_field)
+                    }
+                }
             }
 
             return@setOnEditorActionListener false
@@ -56,8 +78,10 @@ class SearchFragment : Fragment() {
         val adapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, list)
         view?.searched?.adapter = adapter
         view?.searched?.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _: Long ->
-            searchController.searchWith(list[position]!!, loadFacts, failToLoadData)
-            load.show()
+            if(isConnected(noConnection)) {
+                searchController.searchWith(list[position]!!, loadFacts, failToLoadData)
+                load.show()
+            }
         }
         adapter.notifyDataSetChanged()
         if (list.isNotEmpty())
@@ -80,8 +104,10 @@ class SearchFragment : Fragment() {
             val chip = Chip(context, null, R.attr.chipStyle)
             chip.text = category.name
             chip.setOnClickListener { chip ->
-                searchController.searchWith((chip as Chip).text.toString(), loadFacts, failToLoadData, loadSearcheds, noResult)
-                load.show()
+                if(isConnected(noConnection)) {
+                    searchController.searchWith((chip as Chip).text.toString(), loadFacts, failToLoadData, loadSearcheds, noResult)
+                    load.show()
+                }
             }
             view?.chipGroup?.addView(chip as View)
         }
@@ -94,16 +120,27 @@ class SearchFragment : Fragment() {
     }
 
     private val failToLoadData : () -> Unit = {
+        val alert = AlertDialog.Builder(context!!)
+            .setMessage(context!!.getString(R.string.message_fail_load_data))
+            .setPositiveButton(context!!.getString(R.string.buuton_close), null).create()
+        alert.show()
         load.hide()
     }
 
     private val noConnection : () -> Unit = {
+        val alert = AlertDialog.Builder(context!!)
+            .setMessage(context!!.getString(R.string.message_no_connection))
+            .setPositiveButton(context!!.getString(R.string.buuton_close), null).create()
+        alert.show()
         load.hide()
     }
 
     private val noResult : () -> Unit = {
+        val arguments = Bundle().apply {
+            putSerializable(Search::class.java.canonicalName, Search().emptySeach())
+        }
+        (activity!! as MainActivity).intent?.putExtras(arguments)
         load.hide()
+        view?.findNavController()?.popBackStack()
     }
-
-
 }

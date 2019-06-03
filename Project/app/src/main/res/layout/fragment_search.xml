@@ -9,10 +9,11 @@
     android:orientation="vertical"
     android:padding="@dimen/paddin_defaut">
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/queryInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_search"
-    app:boxBackgroundColor="@android:color/transparent">
+        app:boxBackgroundColor="@android:color/transparent">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/query"
             android:layout_width="match_parent"

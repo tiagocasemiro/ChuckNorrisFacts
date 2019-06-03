@@ -50,8 +50,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     /* Domain of application */
     implementation project(":domain")
@@ -61,9 +61,9 @@ dependencies {
     testImplementation "io.mockk:mockk:1.9.3"
 
     /* UI test */
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation ('org.koin:koin-test:1.0.2') {
         exclude group: 'org.mockito'
     }
@@ -100,5 +100,10 @@ dependencies {
     }
 
     /* Material design components */
-    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
+
+    /* Support to emojs */
+    implementation 'androidx.emoji:emoji:1.0.0'
+    implementation 'androidx.emoji:emoji-appcompat:1.0.0'
+    implementation 'androidx.emoji:emoji-bundled:1.0.0'
 }

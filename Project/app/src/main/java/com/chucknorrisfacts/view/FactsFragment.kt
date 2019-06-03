@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.emoji.text.EmojiCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +29,12 @@ class FactsFragment : Fragment() {
             if(bundle.containsKey(Search::class.java.canonicalName)) {
                 val search = bundle.getSerializable(Search::class.java.canonicalName)!! as Search
                 view.facts.adapter = FactsAdapter(search)
+                view!!.facts!!.visibility = View.VISIBLE
+            } else {
+                view?.facts?.visibility = View.GONE
             }
+        }?: run {
+            view?.facts?.visibility = View.GONE
         }
 
         view.facts.addOnScrollListener(object : RecyclerView.OnScrollListener() {

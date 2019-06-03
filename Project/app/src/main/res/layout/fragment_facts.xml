@@ -6,6 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.FactsFragment">
+    <androidx.emoji.widget.EmojiTextView
+        android:id="@+id/noResult"
+        android:gravity="center"
+        android:text="@string/message_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/paddin_defaut"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/facts"
         android:layout_width="match_parent"
