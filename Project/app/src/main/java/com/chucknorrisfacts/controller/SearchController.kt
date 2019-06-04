@@ -72,6 +72,9 @@ class SearchController(private val clientApi: ClientApi, private val searchedDao
             when (val objectReturned = searchedsFromDatabase().await()) {
                 is List<*> -> {
                     val searcheds = objectReturned.map { it as Searched }.toMutableList()
+                    if(searcheds.contains(Searched(query))) {
+                        searcheds.remove(Searched(query))
+                    }
                     searcheds.add(Searched(query))
                     successSearcheds(searcheds)
                 } else -> {

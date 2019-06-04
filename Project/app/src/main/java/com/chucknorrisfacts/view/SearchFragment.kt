@@ -52,7 +52,7 @@ class SearchFragment : Fragment() {
             if(actionId == EditorInfo.IME_ACTION_DONE) {
                 view.queryInputLayout.error = null
                 if(isConnected(noConnection)) {
-                    if(view.query.text.toString().isNotEmpty()) {
+                    if(view.query.text?.trim().toString().isNotEmpty()) {
                         searchController.searchWith(
                             view.query.text.toString(),loadFacts, failToLoadData, loadSearcheds, noResult
                         )

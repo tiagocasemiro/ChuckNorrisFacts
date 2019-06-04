@@ -17,4 +17,11 @@ class Searched(query: String? = null) {
     init {
         this.query = query
     }
- }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Searched)
+            return (other.query != null && this.query != null && other.query.equals(this.query))
+
+        return false
+    }
+}
