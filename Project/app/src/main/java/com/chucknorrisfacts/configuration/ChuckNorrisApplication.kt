@@ -1,17 +1,14 @@
 package com.chucknorrisfacts.configuration
 
 import android.app.Application
-import androidx.core.provider.FontRequest
+import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.FontRequestEmojiCompatConfig
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import org.koin.android.ext.android.startKoin
-import android.R
-import android.graphics.Color
-import androidx.emoji.bundled.BundledEmojiCompatConfig
 
 
+@Suppress("unused")
 class ChuckNorrisApplication : Application() {
     override fun onCreate() {
         super.onCreate()

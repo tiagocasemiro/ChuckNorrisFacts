@@ -48,13 +48,13 @@ class SearchFragment : Fragment() {
             }
         })
 
-        view?.query?.setOnEditorActionListener { query, actionId, event ->
+        view?.query?.setOnEditorActionListener { _, actionId, _ ->
             if(actionId == EditorInfo.IME_ACTION_DONE) {
                 view.queryInputLayout.error = null
                 if(isConnected(noConnection)) {
                     if(view.query.text?.trim().toString().isNotEmpty()) {
                         searchController.searchWith(
-                            view.query.text.toString(),loadFacts, failToLoadData, loadSearcheds, noResult
+                            view.query.text.toString(),loadFacts, failToLoadData, loadSearcheds
                         )
                         load.show()
                     } else {
@@ -104,10 +104,10 @@ class SearchFragment : Fragment() {
         categories.forEach { category ->
             val chip = Chip(context, null, R.attr.chipStyle)
             chip.text = category.name
-            chip.setOnClickListener { chip ->
+            chip.setOnClickListener {
                 if(isConnected(noConnection)) {
-                    view?.query?.setText((chip as Chip).text.toString())
-                    searchController.searchWith((chip as Chip).text.toString(), loadFacts, failToLoadData, loadSearcheds, noResult)
+                    view?.query?.setText(chip.text.toString())
+                    searchController.searchWith(chip.text.toString(), loadFacts, failToLoadData, loadSearcheds)
                     load.show()
                 }
             }

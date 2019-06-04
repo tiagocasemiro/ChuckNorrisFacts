@@ -13,17 +13,13 @@ import com.chucknorrisfacts.view.FactsAdapter.FactViewHolder
 import com.domain.Search
 import kotlinx.android.synthetic.main.adapter_fact_item.view.*
 
-class FactsAdapter(val search: Search): RecyclerView.Adapter<FactViewHolder>() {
+class FactsAdapter(private val search: Search): RecyclerView.Adapter<FactViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FactViewHolder {
         return FactViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.adapter_fact_item, parent, false))
     }
 
     override fun getItemCount(): Int {
-        return search.total?.let {
-            it.toInt()
-        }?: run {
-            0
-        }
+        return search.total?.toInt() ?: run { 0 }
     }
 
     override fun onBindViewHolder(holder: FactViewHolder, position: Int) {

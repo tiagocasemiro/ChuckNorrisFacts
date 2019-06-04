@@ -44,7 +44,7 @@ val clientApiModule = module {
                 OkHttpClient.Builder()
                     .connectTimeout(5000, TimeUnit.MILLISECONDS)
                     .addInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
-                            message -> "CHUCK NORRIS LOG -> $message"
+                        message -> "CHUCK NORRIS LOG -> $message"
                     }).setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build())
             .build()
