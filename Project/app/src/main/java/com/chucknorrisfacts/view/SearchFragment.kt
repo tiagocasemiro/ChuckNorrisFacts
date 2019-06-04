@@ -79,6 +79,7 @@ class SearchFragment : Fragment() {
         view?.searched?.adapter = adapter
         view?.searched?.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _: Long ->
             if(isConnected(noConnection)) {
+                view?.query?.setText(list[position]!!)
                 searchController.searchWith(list[position]!!, loadFacts, failToLoadData)
                 load.show()
             }
@@ -105,6 +106,7 @@ class SearchFragment : Fragment() {
             chip.text = category.name
             chip.setOnClickListener { chip ->
                 if(isConnected(noConnection)) {
+                    view?.query?.setText((chip as Chip).text.toString())
                     searchController.searchWith((chip as Chip).text.toString(), loadFacts, failToLoadData, loadSearcheds, noResult)
                     load.show()
                 }
