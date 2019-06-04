@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_facts.view.*
 
 
 class FactsFragment : Fragment() {
+
     private var state = State.VISIBLE
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,7 +40,6 @@ class FactsFragment : Fragment() {
         }?: run {
             showEmptyMessage(view!!)
         }
-
         view.facts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)

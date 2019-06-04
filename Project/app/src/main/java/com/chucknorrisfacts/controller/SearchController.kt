@@ -12,37 +12,42 @@ import kotlinx.coroutines.*
 class SearchController(private val clientApi: ClientApi, private val searchedDao: SearchedDao, private val categoryDao: CategoryDao) {
 
     fun categories(success: (categories: List<Category>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
-        withContext(Dispatchers.Main) {
-            var categories: List<Category>? = null
-
-            categoriesFromDatabase().await().let {
-                if(it is List<*>) {
-                    categories = (it).map { it as Category }.toList()
-                    categories?.let {list ->
-                        if(list.isNotEmpty()) {
-                            categories = list.shuffled()
-                            if(categories!!.size > 8)
-                                categories = categories!!.slice(0..7)
-                            success(categories!!)
+        if(GlobalScope.async {
+            withContext(Dispatchers.Main) {
+                categoriesFromDatabase().await().let {
+                    if (it is List<*>) {
+                        var categories = (it).map { it as Category }.toList()
+                        categories?.let { list ->
+                            if (list.isNotEmpty()) {
+                                categories = list.shuffled()
+                                if (categories!!.size > 8)
+                                    categories = categories!!.slice(0..7)
+                                success(categories!!)
+                                return@withContext false
+                            } else {
+                                return@withContext true
+                            }
                         }
+                    } else {
+                        return@withContext false
                     }
                 }
             }
-
-            when (val objectReturned = categoriesFromRemoteApi().await()) {
-                is List<*> -> {
-                    this@SearchController.saveOnDatabase(objectReturned)
-                    if(categories == null || categories!!.isEmpty()) {
-                        categories = objectReturned.map { Category(it as String) }.toList()
-                        categories = categories!!.shuffled()
-                        if(categories!!.size > 8)
-                            categories = categories!!.slice(0..7)
-                        success(categories!!)
-                    }
-                }
-                else -> {
-                    if(categories == null) {
-                        fail()
+        }.await()) {
+            GlobalScope.async {
+                withContext(Dispatchers.Main) {
+                    when (val objectReturned = categoriesFromRemoteApi().await()) {
+                        is List<*> -> {
+                            this@SearchController.saveOnDatabase(objectReturned)
+                            var categories = objectReturned.map { Category(it as String) }.toList()
+                            categories = categories!!.shuffled()
+                            if (categories!!.size > 8)
+                                categories = categories!!.slice(0..7)
+                            success(categories!!)
+                        }
+                        else -> {
+                            fail()
+                        }
                     }
                 }
             }
