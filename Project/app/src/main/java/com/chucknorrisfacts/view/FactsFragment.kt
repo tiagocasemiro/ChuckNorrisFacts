@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.emoji.text.EmojiCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -28,13 +27,17 @@ class FactsFragment : Fragment() {
         (activity!! as MainActivity).intent?.extras?.let { bundle ->
             if(bundle.containsKey(Search::class.java.canonicalName)) {
                 val search = bundle.getSerializable(Search::class.java.canonicalName)!! as Search
-                view.facts.adapter = FactsAdapter(search)
-                view!!.facts!!.visibility = View.VISIBLE
+                if(search.total != null && search.total!! > 0) {
+                    view.facts.adapter = FactsAdapter(search)
+                    showListWithFacts(view!!)
+                } else {
+                    showEmptyMessage(view!!)
+                }
             } else {
-                view?.facts?.visibility = View.GONE
+                showEmptyMessage(view!!)
             }
         }?: run {
-            view?.facts?.visibility = View.GONE
+            showEmptyMessage(view!!)
         }
 
         view.facts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -55,6 +58,16 @@ class FactsFragment : Fragment() {
         })
 
         return view
+    }
+
+    private fun showListWithFacts(view: View) {
+        view.facts!!.visibility = View.VISIBLE
+        view.noResult.visibility = View.INVISIBLE
+    }
+
+    private fun showEmptyMessage(view: View) {
+        view.facts!!.visibility = View.INVISIBLE
+        view.noResult.visibility = View.VISIBLE
     }
 
     enum class State {
