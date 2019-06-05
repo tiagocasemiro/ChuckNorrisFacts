@@ -1,5 +1,6 @@
 package com.chucknorrisfacts.controller
 
+import com.chucknorrisfacts.configuration.addOverridingIfExists
 import com.chucknorrisfacts.model.exception.NoSuccessException
 import com.chucknorrisfacts.model.repository.local.CategoryDao
 import com.chucknorrisfacts.model.repository.local.SearchedDao
@@ -72,10 +73,7 @@ class SearchController(
             when (val objectReturned = searchedsFromDatabaseAsync().await()) {
                 is List<*> -> {
                     val searcheds = objectReturned.map { it as Searched }.toMutableList()
-                    if(searcheds.contains(Searched(query))) {
-                        searcheds.remove(Searched(query))
-                    }
-                    searcheds.add(Searched(query))
+                    searcheds.addOverridingIfExists(Searched(query))
                     successSearcheds(searcheds)
                 } else -> {
                     val searcheds = mutableListOf<Searched>()

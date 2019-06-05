@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.domain.Searched
 
 fun Activity.hideKeyboard() {
     (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(window.decorView.windowToken, 0)
@@ -27,4 +28,11 @@ fun Fragment.isConnected(noConnection : () -> Unit) : Boolean{
 
 fun Fragment.hideBackNavegation() {
     (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+}
+
+fun MutableList<Searched>.addOverridingIfExists(searched: Searched) {
+    if(this.contains(searched)) {
+        this.remove(searched)
+    }
+    this.add(searched)
 }
