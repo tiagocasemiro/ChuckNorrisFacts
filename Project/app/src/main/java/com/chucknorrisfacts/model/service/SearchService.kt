@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
+
 class SearchService(private val clientApi: ClientApi, private val searchedDao: SearchedDao, private val categoryDao: CategoryDao) {
 
     fun categoriesFromRemoteApiAsync() = GlobalScope.async(Dispatchers.IO) {
