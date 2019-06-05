@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Chuck Norris Facts</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="aguarde">Aguarde...</string>
+    <string name="aguarde">Aguarde&#8230;</string>
     <string name="hint_search">Enter your search term</string>
     <string name="search_suggestions">Suggestions</string>
     <string name="search_past_searches">Past Searches</string>
@@ -14,4 +12,5 @@
     <string name="buuton_close">CLOSE</string>
     <string name="message_no_result">If no result 😓 take a \' Roundhouse Kick ´ on your dismay 👊 and try again 😅
     </string>
+    <string name="acessibility_share">share</string>
 </resources>

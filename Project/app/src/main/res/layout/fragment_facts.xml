@@ -20,7 +20,8 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/adapter_fact_item"/>
+        tools:listitem="@layout/adapter_fact_item"
+        android:paddingBottom="8dp"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/search"
         android:layout_width="wrap_content"
