@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.chucknorrisfacts.R
 import com.chucknorrisfacts.configuration.hideBackNavegation
+import com.chucknorrisfacts.configuration.hideKeyboard
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.domain.Search

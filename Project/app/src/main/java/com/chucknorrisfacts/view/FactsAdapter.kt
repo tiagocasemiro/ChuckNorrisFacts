@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.chucknorrisfacts.R
 import com.chucknorrisfacts.view.FactsAdapter.FactViewHolder
@@ -25,7 +26,7 @@ class FactsAdapter(private val search: Search): RecyclerView.Adapter<FactViewHol
     override fun onBindViewHolder(holder: FactViewHolder, position: Int) {
         val limitToChangeFont = 80
         holder.category.text = search.result?.get(position)?.category?.name
-        holder.description.text = search.result?.get(position)?.value
+        holder.description.text = HtmlCompat.fromHtml(search.result?.get(position)?.value!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
         if(search.result?.get(position)?.value?.length!! > limitToChangeFont) {
             holder.description.setTextSize(TypedValue.COMPLEX_UNIT_SP, holder.itemView.context.resources.getDimension(R.dimen.font_size_small))
         } else {

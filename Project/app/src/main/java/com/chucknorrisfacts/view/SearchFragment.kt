@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.chucknorrisfacts.R
+import com.chucknorrisfacts.configuration.hideKeyboard
 import com.chucknorrisfacts.configuration.isConnected
 import com.chucknorrisfacts.controller.SearchController
 import com.daimajia.androidanimations.library.Techniques
@@ -67,6 +69,14 @@ class SearchFragment : Fragment() {
             return@setOnEditorActionListener false
         }
 
+        view.setOnTouchListener { v, _ ->
+            if (v !is EditText) {
+                activity!!.hideKeyboard()
+            }
+            false
+        }
+
+
         load.show()
 
         return view
@@ -81,6 +91,7 @@ class SearchFragment : Fragment() {
             if(isConnected(noConnection)) {
                 view?.query?.setText(list[position]!!)
                 searchController.searchWith(list[position]!!, loadFacts, failToLoadData)
+                activity?.hideKeyboard()
                 load.show()
             }
         }
@@ -108,6 +119,7 @@ class SearchFragment : Fragment() {
                 if(isConnected(noConnection)) {
                     view?.query?.setText(chip.text.toString())
                     searchController.searchWith(chip.text.toString(), loadFacts, failToLoadData, loadSearcheds)
+                    activity?.hideKeyboard()
                     load.show()
                 }
             }
