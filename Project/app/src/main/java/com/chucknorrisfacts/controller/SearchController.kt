@@ -1,22 +1,19 @@
 package com.chucknorrisfacts.controller
 
 import com.chucknorrisfacts.configuration.addOverridingIfExists
-import com.chucknorrisfacts.model.exception.NoSuccessException
-import com.chucknorrisfacts.model.repository.local.CategoryDao
-import com.chucknorrisfacts.model.repository.local.SearchedDao
-import com.chucknorrisfacts.model.repository.remote.ClientApi
+import com.chucknorrisfacts.model.service.SearchService
 import com.domain.Category
 import com.domain.Search
 import com.domain.Searched
 import kotlinx.coroutines.*
 
-class SearchController(
-    private val clientApi: ClientApi, private val searchedDao: SearchedDao, private val categoryDao: CategoryDao) {
+
+class SearchController(private val searchService: SearchService) {
 
     fun categories(success: (categories: List<Category>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         if(GlobalScope.async {
             withContext(Dispatchers.Main) {
-                categoriesFromDatabaseAsync().await().let {
+                searchService.categoriesFromDatabaseAsync().await().let {
                     if (it is List<*>) {
                         var categories = (it).map { category -> category as Category }.toList()
                         categories.let { list ->
@@ -31,15 +28,15 @@ class SearchController(
                             }
                         }
                     } else {
-                        return@withContext false
+                        return@withContext true
                     }
                 }
             }
         }.await()) {
             withContext(Dispatchers.Main) {
-                when (val objectReturned = categoriesFromRemoteApiAsync().await()) {
+                when (val objectReturned = searchService.categoriesFromRemoteApiAsync().await()) {
                     is List<*> -> {
-                        this@SearchController.saveOnDatabaseAsync(objectReturned).start()
+                        searchService.saveOnDatabaseAsync(objectReturned).start()
                         var categories = objectReturned.map { Category(it as String) }.toList()
                         categories = categories.shuffled()
                         if (categories.size > 8)
@@ -56,7 +53,7 @@ class SearchController(
 
     fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
-            when (val objectReturned = searchWithQueryFromRemoteApiAsync(query).await()) {
+            when (val objectReturned = searchService.searchWithQueryFromRemoteApiAsync(query).await()) {
                 is Search -> {
                     success(objectReturned)
                 } else -> {
@@ -64,13 +61,13 @@ class SearchController(
                 }
             }
         }
-        this@SearchController.saveOnDatabaseAsync(query).start()
+        searchService.saveOnDatabaseAsync(query).start()
     }
 
     fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit,
                    successSearcheds : (searcheds: List<Searched>) -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
-            when (val objectReturned = searchedsFromDatabaseAsync().await()) {
+            when (val objectReturned = searchService.searchedsFromDatabaseAsync().await()) {
                 is List<*> -> {
                     val searcheds = objectReturned.map { it as Searched }.toMutableList()
                     searcheds.addOverridingIfExists(Searched(query))
@@ -87,7 +84,7 @@ class SearchController(
 
     fun searcheds(success: (facts: List<Searched>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         withContext(Dispatchers.Main) {
-            when (val objectReturned = searchedsFromDatabaseAsync().await()) {
+            when (val objectReturned = searchService.searchedsFromDatabaseAsync().await()) {
                 is List<*> -> {
                     success(objectReturned.map { it as Searched }.toList())
                 } else -> {
@@ -96,68 +93,5 @@ class SearchController(
             }
         }
     }
-
-    private fun categoriesFromRemoteApiAsync() = GlobalScope.async(Dispatchers.IO) {
-        try {
-            val response = clientApi.categories().execute()
-            if (response.isSuccessful)
-                return@async response.body()!!
-             else
-                throw NoSuccessException()
-        } catch (exception: NoSuccessException) {
-            return@async exception
-        } catch (throwable: Throwable) {
-            return@async Exception(throwable)
-        }
-    }
-
-    private fun searchWithQueryFromRemoteApiAsync(query: String) = GlobalScope.async(Dispatchers.IO) {
-        try {
-            val response = clientApi.search(query).execute()
-            if (response.isSuccessful)
-                return@async response.body()!!
-            else
-                throw NoSuccessException()
-        } catch (exception: NoSuccessException) {
-            return@async exception
-        } catch (throwable: Throwable) {
-            return@async Exception(throwable)
-        }
-    }
-
-    private fun categoriesFromDatabaseAsync() = GlobalScope.async(Dispatchers.IO) {
-        return@async try {
-            categoryDao.all()
-        } catch (exception: Exception) {
-            exception.printStackTrace()
-            exception
-        }
-    }
-
-    private fun searchedsFromDatabaseAsync() = GlobalScope.async(Dispatchers.IO)  {
-        try {
-            return@async searchedDao.all()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return@async e
-        }
-    }
-
-    private fun saveOnDatabaseAsync(categories: List<*>) = GlobalScope.async(Dispatchers.IO) {
-        try {
-            categories.forEach {
-                categoryDao.add(Category(it as String))
-            }
-        } catch (e: Exception) {
-           e.printStackTrace()
-        }
-    }
-
-    private fun saveOnDatabaseAsync(query: String) = GlobalScope.async(Dispatchers.IO) {
-        try {
-            searchedDao.add(Searched(query))
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 }
+

@@ -6,6 +6,7 @@ import com.chucknorrisfacts.controller.SearchController
 import com.chucknorrisfacts.model.repository.local.ApplicationDatabase
 import com.chucknorrisfacts.model.repository.remote.ClientApi
 import com.chucknorrisfacts.model.repository.remote.FactDeserialize
+import com.chucknorrisfacts.model.service.SearchService
 import com.domain.Fact
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -18,7 +19,13 @@ import java.util.logging.Logger
 
 val controllersModule = module {
     factory {
-        SearchController(get<Retrofit>().create(ClientApi::class.java), get<ApplicationDatabase>().searchedDao(), get<ApplicationDatabase>().categoryDao())
+        SearchController(get())
+    }
+}
+
+val serviceModule = module {
+    factory {
+        SearchService(get<Retrofit>().create(ClientApi::class.java), get<ApplicationDatabase>().searchedDao(), get<ApplicationDatabase>().categoryDao())
     }
 }
 

@@ -13,7 +13,7 @@ class ChuckNorrisApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Fabric.with(this, Crashlytics())
-        startKoin(this, listOf(controllersModule, databaseModule, clientApiModule))
+        startKoin(this, listOf(controllersModule, serviceModule, databaseModule, clientApiModule))
         EmojiCompat.init(BundledEmojiCompatConfig(this))
     }
 }
