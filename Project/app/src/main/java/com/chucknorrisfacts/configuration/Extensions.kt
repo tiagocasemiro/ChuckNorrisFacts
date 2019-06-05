@@ -9,12 +9,7 @@ import androidx.fragment.app.Fragment
 import com.domain.Searched
 
 fun Activity.hideKeyboard() {
-    (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-}
-
-fun hideSoftKeyboard(activity: Activity) {
-    val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager!!.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+    (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(window.decorView.windowToken, 0)
 }
 
 @Suppress("DEPRECATION")

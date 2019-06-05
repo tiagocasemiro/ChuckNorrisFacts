@@ -59,6 +59,7 @@ class SearchFragment : Fragment() {
                             view.query.text.toString(),loadFacts, failToLoadData, loadSearcheds
                         )
                         load.show()
+                        return@setOnEditorActionListener false
                     } else {
                         YoYo.with(Techniques.Shake).duration(350).playOn(view.queryInputLayout)
                         view.queryInputLayout.error = context!!.getString(R.string.message_required_field)
@@ -66,7 +67,7 @@ class SearchFragment : Fragment() {
                 }
             }
 
-            return@setOnEditorActionListener false
+            return@setOnEditorActionListener true
         }
 
         view.setOnTouchListener { v, _ ->

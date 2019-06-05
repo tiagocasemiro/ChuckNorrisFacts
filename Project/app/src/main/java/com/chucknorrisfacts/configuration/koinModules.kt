@@ -14,6 +14,7 @@ import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import java.util.logging.Logger
 
 val controllersModule = module {
     factory {
@@ -44,7 +45,7 @@ val clientApiModule = module {
                 OkHttpClient.Builder()
                     .connectTimeout(5000, TimeUnit.MILLISECONDS)
                     .addInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
-                        message -> "CHUCK NORRIS LOG -> $message"
+                        message -> Logger.getLogger("CHUCK NORRIS LOG -> ").info(message)
                     }).setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build())
             .build()

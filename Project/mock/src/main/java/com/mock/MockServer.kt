@@ -8,8 +8,8 @@ import com.squareup.okhttp.mockwebserver.RecordedRequest
 import java.io.IOException
 import java.net.InetAddress
 
-class MockServer() {
-    var mockServer = MockWebServer()
+class MockServer {
+    private val mockServer = MockWebServer()
 
     private val dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest?): MockResponse {
@@ -45,9 +45,5 @@ class MockServer() {
         }catch (e: IOException) {
             logger.info("Erro ao tentar iniciar servidor  -->  "+ e.message + e.cause.toString())
         }
-    }
-
-    fun stop() {
-        mockServer.shutdown()
     }
 }
