@@ -26,6 +26,7 @@ class FactsAdapter(private val search: Search): RecyclerView.Adapter<FactViewHol
 
     override fun onBindViewHolder(holder: FactViewHolder, position: Int) {
         val limitToChangeFont = 80
+        val mineType =  "text/html"
         holder.category.text = search.result?.get(position)?.category?.name
         holder.description.text = HtmlCompat.fromHtml(search.result?.get(position)?.value!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
         if(search.result?.get(position)?.value?.length!! > limitToChangeFont) {
@@ -36,10 +37,10 @@ class FactsAdapter(private val search: Search): RecyclerView.Adapter<FactViewHol
         holder.share.setOnClickListener{
             try {
                 val shareIntent = Intent(Intent.ACTION_SEND)
-                shareIntent.type = "text/html"
+                shareIntent.type = mineType
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, holder.itemView.context.getString(R.string.app_name))
                 shareIntent.putExtra(Intent.EXTRA_TEXT, BuildConfig.HOST + search.result?.get(position)?.url)
-                holder.itemView.context.startActivity(Intent.createChooser(shareIntent, "Choose one"))
+                holder.itemView.context.startActivity(Intent.createChooser(shareIntent, holder.itemView.context.getString(R.string.title_share)))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
