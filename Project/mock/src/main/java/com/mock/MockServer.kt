@@ -7,6 +7,7 @@ import com.squareup.okhttp.mockwebserver.MockResponse
 import com.squareup.okhttp.mockwebserver.RecordedRequest
 import java.io.IOException
 import java.net.InetAddress
+import java.util.logging.Logger
 
 class MockServer {
     private val mockServer = MockWebServer()
@@ -22,10 +23,12 @@ class MockServer {
 
             when {
                 request!!.path!!.contains("/jokes/search") -> {
+                    Logger.getLogger("MOCK").info(json.search())
                     mockResponse.setBody(json.search())
                     mockResponse.setResponseCode(200)
                 }
                 request.path!!.contains("/jokes/categories") -> {
+                    Logger.getLogger("MOCK").info(json.categories())
                     mockResponse.setBody(json.categories())
                     mockResponse.setResponseCode(200)
 

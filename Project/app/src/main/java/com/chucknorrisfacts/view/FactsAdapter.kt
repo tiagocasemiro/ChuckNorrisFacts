@@ -16,6 +16,7 @@ import com.domain.Search
 import kotlinx.android.synthetic.main.adapter_fact_item.view.*
 
 class FactsAdapter(private val search: Search): RecyclerView.Adapter<FactViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FactViewHolder {
         return FactViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.adapter_fact_item, parent, false))
     }
