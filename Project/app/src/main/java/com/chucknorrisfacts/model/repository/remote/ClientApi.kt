@@ -6,9 +6,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ClientApi {
-    @GET("https://api.chucknorris.io/jokes/search")
+    @GET("/jokes/search")
     fun search(@Query("query") query: String): Call<Search>
 
-    @GET("https://api.chucknorris.io/jokes/categories")
+    @GET("/jokes/categories")
     fun categories(): Call<List<String>>
 }

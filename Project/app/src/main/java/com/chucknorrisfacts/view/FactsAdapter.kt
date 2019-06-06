@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.chucknorrisfacts.BuildConfig
 import com.chucknorrisfacts.R
 import com.chucknorrisfacts.view.FactsAdapter.FactViewHolder
 import com.domain.Search
@@ -37,7 +38,7 @@ class FactsAdapter(private val search: Search): RecyclerView.Adapter<FactViewHol
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/html"
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, holder.itemView.context.getString(R.string.app_name))
-                shareIntent.putExtra(Intent.EXTRA_TEXT, search.result?.get(position)?.url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, BuildConfig.HOST + search.result?.get(position)?.url)
                 holder.itemView.context.startActivity(Intent.createChooser(shareIntent, "Choose one"))
             } catch (e: Exception) {
                 e.printStackTrace()
