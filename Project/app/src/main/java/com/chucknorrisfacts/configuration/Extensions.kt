@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.domain.Category
 import com.domain.Searched
 
 fun Activity.hideKeyboard() {
@@ -36,4 +37,12 @@ fun MutableList<Searched>.addOverridingIfExists(searched: Searched) {
         this.remove(searched)
     }
     this.add(searched)
+}
+
+fun List<Category>.shuffledAndSlice() : List<Category> {
+    var list = this.shuffled()
+    if (list.size > 8)
+        list = list.slice(0..7)
+
+    return list
 }

@@ -31,14 +31,15 @@ class FactsFragment : Fragment() {
                 if(search.total != null && search.total!! > 0) {
                     view.facts.adapter = FactsAdapter(search)
                     showListWithFacts(view!!)
+                    bundle.remove(Search::class.java.canonicalName)
                 } else {
                     showEmptyMessage(view!!)
                 }
             } else {
-                showEmptyMessage(view!!)
+                hideAll(view!!)
             }
         }?: run {
-            showEmptyMessage(view!!)
+            hideAll(view!!)
         }
         view.facts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -68,6 +69,11 @@ class FactsFragment : Fragment() {
     private fun showEmptyMessage(view: View) {
         view.facts!!.visibility = View.INVISIBLE
         view.noResult.visibility = View.VISIBLE
+    }
+
+    private fun hideAll(view: View) {
+        view.facts!!.visibility = View.INVISIBLE
+        view.noResult.visibility = View.INVISIBLE
     }
 
     enum class State {

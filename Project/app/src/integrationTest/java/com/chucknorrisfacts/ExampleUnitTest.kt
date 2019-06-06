@@ -7,6 +7,9 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ExampleUnitTest {
+
+    //Integration Test
+
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)

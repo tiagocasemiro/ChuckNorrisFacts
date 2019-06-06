@@ -12,5 +12,5 @@ interface CategoryDao {
     fun add(vararg category: Category)
 
     @Query("SELECT * FROM category")
-    fun all(): List<Category>
+    fun all() : List<Category>
 }

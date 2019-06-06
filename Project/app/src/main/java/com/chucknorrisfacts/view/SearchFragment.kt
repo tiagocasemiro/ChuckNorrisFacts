@@ -26,6 +26,10 @@ import com.domain.Searched
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 
@@ -83,79 +87,108 @@ class SearchFragment : Fragment() {
         return view
     }
 
-    private val loadSearcheds : (searcheds: List<Searched>) -> Unit = { searcheds ->
-        val list = searcheds.distinctBy { Pair(it.query, it.query) }.map { it.query }.reversed().toList()
+    override fun onPause() {
+        super.onPause()
+        load.hide()
+    }
 
-        val adapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, list)
-        view?.searched?.adapter = adapter
-        view?.searched?.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _: Long ->
-            if(isConnected(noConnection)) {
-                view?.query?.setText(list[position]!!)
-                searchController.searchWith(list[position]!!, loadFacts, failToLoadData)
-                activity?.hideKeyboard()
-                load.show()
+    private val loadSearcheds : (searcheds: List<Searched>) -> Unit = { searcheds ->
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                val list = searcheds.distinctBy { Pair(it.query, it.query) }.map { it.query }.reversed().toList()
+
+                val adapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, list)
+                view?.searched?.adapter = adapter
+                view?.searched?.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _: Long ->
+                    if (isConnected(noConnection)) {
+                        view?.query?.setText(list[position]!!)
+                        searchController.searchWith(list[position]!!, loadFacts, failToLoadData)
+                        activity?.hideKeyboard()
+                        load.show()
+                    }
+                }
+                adapter.notifyDataSetChanged()
+                if (list.isNotEmpty())
+                    searchedLabel.visibility = View.VISIBLE
+                else
+                    searchedLabel.visibility = View.INVISIBLE
             }
         }
-        adapter.notifyDataSetChanged()
-        if (list.isNotEmpty())
-            searchedLabel.visibility = View.VISIBLE
-        else
-            searchedLabel.visibility = View.INVISIBLE
     }
 
     private val loadFacts : (search: Search) -> Unit = { search ->
-        val arguments = Bundle().apply {
-            putSerializable(Search::class.java.canonicalName, search)
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                val arguments = Bundle().apply {
+                    putSerializable(Search::class.java.canonicalName, search)
+                }
+                (activity!! as MainActivity).intent?.putExtras(arguments)
+                load.hide()
+                view?.findNavController()?.popBackStack()
+            }
         }
-        (activity!! as MainActivity).intent?.putExtras(arguments)
-        load.hide()
-        view?.findNavController()?.popBackStack()
     }
 
     private val loadCategories : (categories: List<Category>) -> Unit = { categories ->
-        categories.forEach { category ->
-            val chip = Chip(context, null, R.attr.chipStyle)
-            chip.text = category.name
-            chip.setOnClickListener {
-                if(isConnected(noConnection)) {
-                    view?.query?.setText(chip.text.toString())
-                    searchController.searchWith(chip.text.toString(), loadFacts, failToLoadData, loadSearcheds)
-                    activity?.hideKeyboard()
-                    load.show()
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                categories.forEach { category ->
+                    val chip = Chip(context, null, R.attr.chipStyle)
+                    chip.text = category.name
+                    chip.setOnClickListener {
+                        if (isConnected(noConnection)) {
+                            view?.query?.setText(chip.text.toString())
+                            searchController.searchWith(chip.text.toString(), loadFacts, failToLoadData, loadSearcheds)
+                            activity?.hideKeyboard()
+                            load.show()
+                        }
+                    }
+                    view?.chipGroup?.addView(chip as View)
                 }
-            }
-            view?.chipGroup?.addView(chip as View)
-        }
-        if(categories.isNotEmpty())
-            categoryLabel.visibility = View.VISIBLE
-         else
-            categoryLabel.visibility = View.INVISIBLE
+                if (categories.isNotEmpty())
+                    categoryLabel.visibility = View.VISIBLE
+                else
+                    categoryLabel.visibility = View.INVISIBLE
 
-        load.hide()
+                load.hide()
+            }
+        }
     }
 
     private val failToLoadData : () -> Unit = {
-        val alert = AlertDialog.Builder(context!!)
-            .setMessage(context!!.getString(R.string.message_fail_load_data))
-            .setPositiveButton(context!!.getString(R.string.buuton_close), null).create()
-        alert.show()
-        load.hide()
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                val alert = AlertDialog.Builder(context!!)
+                    .setMessage(context!!.getString(R.string.message_fail_load_data))
+                    .setPositiveButton(context!!.getString(R.string.buuton_close), null).create()
+                alert.show()
+                load.hide()
+            }
+        }
     }
 
     private val noConnection : () -> Unit = {
-        val alert = AlertDialog.Builder(context!!)
-            .setMessage(context!!.getString(R.string.message_no_connection))
-            .setPositiveButton(context!!.getString(R.string.buuton_close), null).create()
-        alert.show()
-        load.hide()
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                val alert = AlertDialog.Builder(context!!)
+                    .setMessage(context!!.getString(R.string.message_no_connection))
+                    .setPositiveButton(context!!.getString(R.string.buuton_close), null).create()
+                alert.show()
+                load.hide()
+            }
+        }
     }
 
     private val noResult : () -> Unit = {
-        val arguments = Bundle().apply {
-            putSerializable(Search::class.java.canonicalName, Search().emptySeach())
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                val arguments = Bundle().apply {
+                    putSerializable(Search::class.java.canonicalName, Search().emptySeach())
+                }
+                (activity!! as MainActivity).intent?.putExtras(arguments)
+                load.hide()
+                view?.findNavController()?.popBackStack()
+            }
         }
-        (activity!! as MainActivity).intent?.putExtras(arguments)
-        load.hide()
-        view?.findNavController()?.popBackStack()
     }
 }

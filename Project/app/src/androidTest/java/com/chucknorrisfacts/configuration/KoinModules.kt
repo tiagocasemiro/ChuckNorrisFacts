@@ -14,6 +14,7 @@ import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import java.util.logging.Logger
 
 val clientApiModuleMock = module(override = true) {
     factory {
@@ -24,7 +25,7 @@ val clientApiModuleMock = module(override = true) {
                 OkHttpClient.Builder()
                     .connectTimeout(5000, TimeUnit.MILLISECONDS)
                     .addInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
-                            message -> "CHUCK NORRIS LOG -> $message"
+                        message -> Logger.getLogger("CHUCK NORRIS TEST LOG -> ").info(message)
                     }).setLevel(HttpLoggingInterceptor.Level.BODY))
                     .addInterceptor(get<MockInterceptor>())
                     .build())
