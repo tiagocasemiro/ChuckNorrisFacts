@@ -27,7 +27,7 @@ class SearchControllerTest {
     private val gson: Gson = GsonBuilder().registerTypeAdapter(Fact::class.java,  FactDeserialize()).create()
 
     @Before
-    fun before() {
+    fun prepare() {
         MockKAnnotations.init(this, relaxUnitFun = true)
     }
 

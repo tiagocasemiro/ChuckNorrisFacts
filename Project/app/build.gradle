@@ -29,7 +29,8 @@ android {
             minifyEnabled false
             shrinkResources false
 
-            buildConfigField("String", "HOST", "\"http://192.168.0.107:8080\"")
+            //buildConfigField("String", "HOST", "\"http://192.168.0.107:8080\"")
+            buildConfigField("String", "HOST", "\"https://api.chucknorris.io/\"")
             buildConfigField("String", "DATABASE", "\"database-debug\"")
 
             manifestPlaceholders = [allowBackup:false]

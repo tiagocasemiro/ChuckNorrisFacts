@@ -3,9 +3,11 @@ package com.chucknorrisfacts.configuration
 import androidx.room.Room
 import androidx.test.InstrumentationRegistry
 import com.chucknorrisfacts.BuildConfig
+import com.chucknorrisfacts.controller.SearchController
 import com.chucknorrisfacts.model.repository.local.ApplicationDatabase
 import com.chucknorrisfacts.model.repository.remote.ClientApi
 import com.chucknorrisfacts.model.repository.remote.FactDeserialize
+import com.chucknorrisfacts.model.service.SearchService
 import com.domain.Fact
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -15,6 +17,18 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
+
+val controllersModule = module {
+    factory {
+        SearchController(get())
+    }
+}
+
+val serviceModule = module {
+    factory {
+        SearchService(get<Retrofit>().create(ClientApi::class.java), get<ApplicationDatabase>().searchedDao(), get<ApplicationDatabase>().categoryDao())
+    }
+}
 
 val clientApiModuleMock = module(override = true) {
     factory {

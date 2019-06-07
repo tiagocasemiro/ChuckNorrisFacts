@@ -46,3 +46,7 @@ fun List<Category>.shuffledAndSlice() : List<Category> {
 
     return list
 }
+
+fun String.diferent(other: String) : Boolean {
+    return !this.equals(other)
+}

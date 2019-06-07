@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 class SearchController(private val searchService: SearchService) {
 
     fun categories(success: (categories: List<Category>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
-        searchService.categoriesFromDatabaseAsync().await().let {categoriesFromDb ->
+        searchService.categoriesFromDatabaseAsync().await().let { categoriesFromDb ->
             if (categoriesFromDb is List<*> && categoriesFromDb.isNotEmpty()) {
                 success((categoriesFromDb).map { category -> category as Category }.toList().shuffledAndSlice())
             } else {

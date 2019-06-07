@@ -1,6 +1,7 @@
 package com.chucknorrisfacts.configuration
 
-import com.mock.ResponseJson
+import com.chucknorrisfacts.mockJsonSearchFromApi
+import com.chucknorrisfacts.mockJsonCategoryFromApi
 import okhttp3.Interceptor
 import okhttp3.MediaType
 import okhttp3.Protocol
@@ -12,14 +13,13 @@ class MockInterceptor: Interceptor {
         val path = chain.request().url().encodedPath()
         var code = 200
         val json = StringBuilder()
-        val responseJson = ResponseJson()
 
         when {
             path.contains("/jokes/search") -> {
-                json.append(responseJson.search())
+                json.append(mockJsonSearchFromApi())
             }
             path.contains("/jokes/categories") -> {
-                json.append(responseJson.categories())
+                json.append(mockJsonCategoryFromApi())
             }
             else -> code = 404
         }
