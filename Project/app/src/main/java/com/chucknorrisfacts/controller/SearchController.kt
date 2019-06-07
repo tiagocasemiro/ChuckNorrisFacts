@@ -18,7 +18,7 @@ class SearchController(private val searchService: SearchService) {
             } else {
                 searchService.categoriesFromRemoteApiAsync().await().let { categoriesFromApi ->
                     if (categoriesFromApi is List<*> && categoriesFromApi.isNotEmpty()) {
-                        searchService.saveOnDatabaseAsync(categoriesFromApi).start()
+                        searchService.saveOnDatabaseAsync(categoriesFromApi.toList()).start()
                         success(categoriesFromApi.map { Category(it as String) }.toList().shuffledAndSlice())
                     } else  {
                         fail()
