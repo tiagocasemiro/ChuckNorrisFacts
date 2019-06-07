@@ -18,7 +18,7 @@ class SearchController(private val searchService: SearchService) {
             } else {
                 searchService.categoriesFromRemoteApiAsync().await().let { categoriesFromApi ->
                     if (categoriesFromApi is List<*> && categoriesFromApi.isNotEmpty()) {
-                        searchService.saveOnDatabaseAsync(categoriesFromApi).start()
+                        searchService.saveOnDatabaseAsync(categoriesFromApi)
                         success(categoriesFromApi.map { Category(it as String) }.toList().shuffledAndSlice())
                     } else  {
                         fail()
@@ -37,7 +37,7 @@ class SearchController(private val searchService: SearchService) {
             }
         }
 
-        searchService.saveOnDatabaseAsync(query).start()
+        searchService.saveOnDatabaseAsync(query)
     }
 
     fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit,
@@ -46,7 +46,7 @@ class SearchController(private val searchService: SearchService) {
             is List<*> -> {
                 val searcheds = objectReturned.map { it as Searched }.toMutableList()
                 searcheds.addOverridingIfExists(Searched(query))
-                successSearcheds(searcheds)
+                successSearcheds(searcheds.reversed())
             } else -> {
                 val searcheds = mutableListOf<Searched>()
                 searcheds.add(Searched(query))
@@ -60,7 +60,7 @@ class SearchController(private val searchService: SearchService) {
     fun searcheds(success: (facts: List<Searched>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
         when (val objectReturned = searchService.searchedsFromDatabaseAsync().await()) {
             is List<*> -> {
-                success(objectReturned.map { it as Searched }.toList())
+                success(objectReturned.map { it as Searched }.toList().reversed())
             } else -> {
                 fail()
             }

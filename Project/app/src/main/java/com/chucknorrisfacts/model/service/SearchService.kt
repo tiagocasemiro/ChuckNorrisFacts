@@ -61,7 +61,7 @@ class SearchService(private val clientApi: ClientApi, private val searchedDao: S
 
     fun saveOnDatabaseAsync(categories: List<*>) = GlobalScope.async(Dispatchers.IO) {
         try {
-            categories.forEach {
+            categories.toList().forEach {
                 categoryDao.add(Category(it as String))
             }
         } catch (e: Exception) {

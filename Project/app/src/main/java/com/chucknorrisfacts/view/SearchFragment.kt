@@ -95,7 +95,7 @@ class SearchFragment : Fragment() {
     private val loadSearcheds : (searcheds: List<Searched>) -> Unit = { searcheds ->
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
-                val list = searcheds.distinctBy { Pair(it.query, it.query) }.map { it.query }.reversed().toList()
+                val list = searcheds.distinctBy { Pair(it.query, it.query) }.map { it.query }.toList()
 
                 val adapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, list)
                 view?.searched?.adapter = adapter

@@ -7,7 +7,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
 
-
 class ResponseJson {
     private val gson: Gson
 
