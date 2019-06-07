@@ -50,14 +50,18 @@ class SearchServiceTest : KoinTest {
 
     @Test
     fun Deve_retornar_lista_de_fatos__Quando_metodo_searchWithQueryFromRemoteApiAsync_for_chamado() {
+        // arrange
         val expectedNumberOfFacts: Long = 4
         val query = "car"
 
         runBlocking {
+            // action
             searchService.searchWithQueryFromRemoteApiAsync(query).await().let { search ->
                 if(search is Search) {
+                    // assertion
                     Assert.assertEquals(expectedNumberOfFacts, search.total)
                 } else {
+                    // assertion
                     Assert.fail("Servidor falhou a tentar buscar os fatos")
                 }
             }
@@ -122,9 +126,8 @@ class SearchServiceTest : KoinTest {
             // action
             searchService.saveOnDatabaseAsync(expectedCategories).await()
 
-            val categories = categoryDao.all()
-
             //assert
+            val categories = categoryDao.all()
             Assert.assertEquals(expectedCategories.size, categories.size)
             categories.forEachIndexed { index, category ->
                 if (expectedCategories[index].diferent(category.name!!)) {
@@ -144,9 +147,8 @@ class SearchServiceTest : KoinTest {
             // action
             searchService.saveOnDatabaseAsync(expectedQuery).await()
 
-            val searcheds = searchedDao.all()
-
             //assert
+            val searcheds = searchedDao.all()
             Assert.assertEquals(searcheds.size, expectedNumberOfQuerys)
             Assert.assertEquals(searcheds[0].query, expectedQuery)
         }
