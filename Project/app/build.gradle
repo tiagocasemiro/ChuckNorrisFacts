@@ -20,7 +20,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            buildConfigField("String", "HOST", "\"https://api.chucknorris.io/\"")
+            buildConfigField("String", "HOST", "\"https://api.chucknorris.io\"")
             buildConfigField("String", "DATABASE", "\"database-release\"")
 
             manifestPlaceholders = [allowBackup:true]
@@ -30,7 +30,7 @@ android {
             shrinkResources false
 
             //buildConfigField("String", "HOST", "\"http://192.168.0.107:8080\"")
-            buildConfigField("String", "HOST", "\"https://api.chucknorris.io/\"")
+            buildConfigField("String", "HOST", "\"https://api.chucknorris.io\"")
             buildConfigField("String", "DATABASE", "\"database-debug\"")
 
             manifestPlaceholders = [allowBackup:false]
@@ -40,6 +40,9 @@ android {
         androidTest {
             java.srcDirs += "$projectDir/src/integrationTest/java"
         }
+    }
+    testOptions {
+        animationsDisabled = true
     }
 }
 
@@ -51,25 +54,21 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.core:core:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     /* Domain of application */
     implementation project(":domain")
 
     /* Unit test */
-    testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation 'androidx.test.ext:junit:1.1.1'
 
     /* UI test */
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation ('org.koin:koin-test:1.0.2') {
-        exclude group: 'org.mockito'
-    }
-    androidTestImplementation ('org.mockito:mockito-android:2.24.5')
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation ('org.koin:koin-test:1.0.2')
     androidTestImplementation project(":mock")
 
     /* Koin injection dependency */

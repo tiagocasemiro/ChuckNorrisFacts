@@ -1,7 +1,7 @@
 package com.chucknorrisfacts
 
-import androidx.test.filters.LargeTest
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.filters.MediumTest
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chucknorrisfacts.configuration.clientApiModuleMock
 import com.chucknorrisfacts.configuration.databaseModuleMock
 import com.chucknorrisfacts.configuration.diferent
@@ -21,7 +21,7 @@ import org.koin.standalone.inject
 import org.koin.test.KoinTest
 
 
-@LargeTest
+@MediumTest
 @RunWith(AndroidJUnit4::class)
 class SearchServiceTest : KoinTest {
     private val searchService: SearchService by inject()
@@ -34,7 +34,7 @@ class SearchServiceTest : KoinTest {
     }
 
     @Test
-    fun Deve_retornar_lista_de_categorias__Quando_metodo_categoriesFromRemoteApiAsync_for_chamado() {
+    fun deve_retornar_lista_de_categorias__Quando_metodo_categoriesFromRemoteApiAsync_for_chamado() {
         val expectedNumberOfCategories = 16
 
         runBlocking {
@@ -49,7 +49,7 @@ class SearchServiceTest : KoinTest {
     }
 
     @Test
-    fun Deve_retornar_lista_de_fatos__Quando_metodo_searchWithQueryFromRemoteApiAsync_for_chamado() {
+    fun deve_retornar_lista_de_fatos__Quando_metodo_searchWithQueryFromRemoteApiAsync_for_chamado() {
         // arrange
         val expectedNumberOfFacts: Long = 4
         val query = "car"
@@ -69,7 +69,7 @@ class SearchServiceTest : KoinTest {
     }
 
     @Test
-    fun Deve_retornar_lista_de_categorias__Quando_metodo_categoriesFromDatabaseAsync_for_chamado() {
+    fun deve_retornar_lista_de_categorias__Quando_metodo_categoriesFromDatabaseAsync_for_chamado() {
         // arrange
         val expectedNumberOfCategories = 2
         val expectedName = "History"
@@ -93,7 +93,7 @@ class SearchServiceTest : KoinTest {
     }
 
     @Test
-    fun Deve_retornar_lista_de_termos_buscados__Quando_metodo_searchedsFromDatabaseAsync_for_chamado() {
+    fun deve_retornar_lista_de_termos_buscados__Quando_metodo_searchedsFromDatabaseAsync_for_chamado() {
         // arrange
         val expectedNumberOfSearcheds = 3
         val expectedQuery = "Car"
@@ -118,7 +118,7 @@ class SearchServiceTest : KoinTest {
     }
 
     @Test
-    fun Deve_salvar_lista_de_categorias__Quando_metodo_saveOnDatabaseAsync_for_chamado_com_uma_lisa_de_string() {
+    fun deve_salvar_lista_de_categorias__Quando_metodo_saveOnDatabaseAsync_for_chamado_com_uma_lisa_de_string() {
         // arrange
        val expectedCategories = mockCategoriesObjectFromApi()
 
@@ -138,7 +138,7 @@ class SearchServiceTest : KoinTest {
     }
 
     @Test
-    fun Deve_salvar_termo_buscado__Quando_metodo_saveOnDatabaseAsync_for_chamado_com_uma_string() {
+    fun deve_salvar_termo_buscado__Quando_metodo_saveOnDatabaseAsync_for_chamado_com_uma_string() {
         // arrange
         val expectedQuery = "fight"
         val expectedNumberOfQuerys = 1
