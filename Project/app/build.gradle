@@ -88,8 +88,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
 
     /* Navegation Host */
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-alpha04'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0-alpha04'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
 
     /* Animacoes */
     implementation 'com.daimajia.easing:library:2.0@aar'
@@ -101,7 +101,7 @@ dependencies {
     }
 
     /* Material design components */
-    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'com.google.android.material:material:1.0.0'
 
     /* Support to emojs */
     implementation 'androidx.emoji:emoji:1.0.0'

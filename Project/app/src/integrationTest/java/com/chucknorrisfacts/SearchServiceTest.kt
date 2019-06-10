@@ -1,7 +1,7 @@
 package com.chucknorrisfacts
 
-import androidx.test.filters.MediumTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
 import com.chucknorrisfacts.configuration.clientApiModuleMock
 import com.chucknorrisfacts.configuration.databaseModuleMock
 import com.chucknorrisfacts.configuration.diferent
@@ -21,7 +21,7 @@ import org.koin.standalone.inject
 import org.koin.test.KoinTest
 
 
-@MediumTest
+@SmallTest
 @RunWith(AndroidJUnit4::class)
 class SearchServiceTest : KoinTest {
     private val searchService: SearchService by inject()

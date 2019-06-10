@@ -21,7 +21,7 @@ class FactSerialize : JsonSerializer<Fact> {
         jsonObject.addProperty("icon_url", src?.icon)
         src?.category?.name?.let {
             val jsonAuthorsArray = JsonArray()
-            jsonAuthorsArray.add(JsonPrimitive(src?.category?.name))
+            jsonAuthorsArray.add(JsonPrimitive(src.category?.name))
             jsonObject.add("categories", jsonAuthorsArray)
         }
 

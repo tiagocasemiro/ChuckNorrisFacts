@@ -14,6 +14,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.chucknorrisfacts.BuildConfig
 import com.chucknorrisfacts.R
 import com.chucknorrisfacts.configuration.*
 import com.chucknorrisfacts.mockSearchFromIntent
@@ -153,7 +154,7 @@ class FactsFragmentTest : KoinTest {
     @Test
     fun deve_lancar_uma_intent_action_send_e_a_url_do_fato__Quando_clicar_no_botao_compartilhar_do_card() {
         // arrange
-        val expectedShareUrl = "https://api.chucknorris.io/jokes/tng5xzi5t9syvqaubukycw"
+        val expectedShareUrl = BuildConfig.HOST + "/jokes/tng5xzi5t9syvqaubukycw"
         val intent = Intent()
         val arguments = Bundle().apply {
             putSerializable(Search::class.java.canonicalName, mockSearchFromIntent())
