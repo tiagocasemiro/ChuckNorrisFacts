@@ -1,0 +1,23 @@
+os: osx
+anguage: android
+dist: trusty
+android:
+  components:
+    # The BuildTools version
+    - build-tools-28.0.3
+
+    # The SDK version
+    - android-28
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+    # Least system image
+    - sys-img-x86-android-26
+    - sys-img-armeabi-v7a-android-17
+script:
+    — ./gradlew build jacocoTestReport
+after_success:
+  — bash <(curl -s https://codecov.io/bash) -t 82b133d4-3371-4d9a-b720-845121f5ea5d

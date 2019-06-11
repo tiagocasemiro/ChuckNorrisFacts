@@ -1,0 +1,131 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+apply plugin: 'jacoco-android'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        applicationId "com.chucknorrisfacts"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField("String", "HOST", "\"https://api.chucknorris.io\"")
+            buildConfigField("String", "DATABASE", "\"database-release\"")
+
+            manifestPlaceholders = [allowBackup:true]
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+
+            //buildConfigField("String", "HOST", "\"http://192.168.0.107:8080\"")
+            buildConfigField("String", "HOST", "\"https://api.chucknorris.io\"")
+            buildConfigField("String", "DATABASE", "\"database-debug\"")
+
+            testCoverageEnabled true
+
+            manifestPlaceholders = [allowBackup:false]
+        }
+    }
+    sourceSets {
+        androidTest {
+            java.srcDirs += "$projectDir/src/integrationTest/java"
+        }
+    }
+    testOptions {
+        animationsDisabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.core:core:1.0.2'
+
+    /* Domain of application */
+    implementation project(":domain")
+
+    /* Unit test */
+    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation 'androidx.test.ext:junit:1.1.1'
+
+    /* UI test */
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation ('org.koin:koin-test:1.0.2')
+    androidTestImplementation project(":mock")
+
+    /* Koin injection dependency */
+    implementation 'org.koin:koin-android:1.0.2'
+
+    /* Roon orm local repository */
+    implementation 'androidx.room:room-runtime:2.0.0'
+    kapt 'androidx.room:room-compiler:2.0.0'
+
+    /* Retrofit rest api client */
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+
+    /* Kotlin corotines Android */
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+
+    /* Navegation Host */
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
+
+    /* Animacoes */
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
+
+    /* Crash report */
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+        transitive = true
+    }
+
+    /* Material design components */
+    implementation 'com.google.android.material:material:1.0.0'
+
+    /* Support to emojs */
+    implementation 'androidx.emoji:emoji:1.0.0'
+    implementation 'androidx.emoji:emoji-appcompat:1.0.0'
+    implementation 'androidx.emoji:emoji-bundled:1.0.0'
+}
