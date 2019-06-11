@@ -14,6 +14,14 @@ buildscript {
     }
 }
 
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -43,6 +51,8 @@ android {
             //buildConfigField("String", "HOST", "\"http://192.168.0.107:8080\"")
             buildConfigField("String", "HOST", "\"https://api.chucknorris.io\"")
             buildConfigField("String", "DATABASE", "\"database-debug\"")
+
+            testCoverageEnabled true
 
             manifestPlaceholders = [allowBackup:false]
         }

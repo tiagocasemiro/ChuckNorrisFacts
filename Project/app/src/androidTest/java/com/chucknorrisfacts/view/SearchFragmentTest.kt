@@ -59,6 +59,9 @@ class SearchFragmentTest : KoinTest {
         // action
         onView(withId(R.id.query)).perform(pressImeActionButton())
 
+        //TODO Override by IdlingResource
+        Thread.sleep(500)
+
         // assert
         onView(withId(R.id.noResult)).check(matches(Matchers.not(isDisplayed())))
         onView(withId(R.id.facts)).check(matches(isDisplayed()))
