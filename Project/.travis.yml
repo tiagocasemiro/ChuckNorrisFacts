@@ -18,6 +18,6 @@ android:
     - sys-img-x86-android-26
     - sys-img-armeabi-v7a-android-17
 script:
-    — ./gradlew build jacocoTestReport
+  — ./gradlew build jacocoTestReport
 after_success:
   — bash <(curl -s https://codecov.io/bash) -t 82b133d4-3371-4d9a-b720-845121f5ea5d
