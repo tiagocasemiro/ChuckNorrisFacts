@@ -4,6 +4,7 @@ import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -15,11 +16,12 @@ import com.chucknorrisfacts.configuration.NavigationTestRule
 import com.chucknorrisfacts.configuration.clientApiModuleMock
 import com.chucknorrisfacts.configuration.databaseModuleMock
 import com.chucknorrisfacts.model.repository.local.SearchedDao
+import com.domain.Search
 import com.domain.Searched
 import org.hamcrest.Description
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -56,16 +58,20 @@ class SearchFragmentTest : KoinTest {
         // arrange
         onView(withId(R.id.query)).perform(click(), typeText("car"))
 
+        Navigation.findNavController(activityTestRule.activity, R.id.fragmentHost).addOnDestinationChangedListener{ _,_,_ ->
+            activityTestRule.activity.intent.extras?.let { bundle ->
+                if(bundle.containsKey(Search::class.java.canonicalName)) {
+                    (bundle.getSerializable(Search::class.java.canonicalName)!! as Search).let { search ->
+                        Assert.assertTrue(search.total != null && search.total!! > 0)
+                    }
+                } else {
+                    Assert.fail()
+                }
+            }
+        }
+
         // action
         onView(withId(R.id.query)).perform(pressImeActionButton())
-
-        //TODO Override by IdlingResource
-        Thread.sleep(500)
-
-        // assert
-        onView(withId(R.id.noResult)).check(matches(Matchers.not(isDisplayed())))
-        onView(withId(R.id.facts)).check(matches(isDisplayed()))
-        onView(withId(R.id.search)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -96,6 +102,19 @@ class SearchFragmentTest : KoinTest {
     fun deve_fazer_uma_busca_com_a_categoria__Quando_clicar_em_uma_categoria() {
         activityTestRule.launchActivity(nothing)
 
+        // assert
+        Navigation.findNavController(activityTestRule.activity, R.id.fragmentHost).addOnDestinationChangedListener{ _,_,_ ->
+            activityTestRule.activity.intent.extras?.let { bundle ->
+                if(bundle.containsKey(Search::class.java.canonicalName)) {
+                    (bundle.getSerializable(Search::class.java.canonicalName)!! as Search).let { search ->
+                        Assert.assertTrue(search.total != null && search.total!! > 0)
+                    }
+                } else {
+                    Assert.fail()
+                }
+            }
+        }
+
         // action
         onView(object : TypeSafeMatcher<View>() {
                 override fun describeTo(description: Description) {
@@ -108,25 +127,29 @@ class SearchFragmentTest : KoinTest {
                     return parent is ViewGroup && withId(R.id.chipGroup).matches(parent) && view == parent.getChildAt(0)
                 }
             }).perform(click())
-
-        // assert
-        onView(withId(R.id.noResult)).check(matches(Matchers.not(isDisplayed())))
-        onView(withId(R.id.facts)).check(matches(isDisplayed()))
-        onView(withId(R.id.search)).check(matches(isDisplayed()))
     }
 
     @Test
     fun deve_fazer_uma_busca_com_o_termo__Quando_clicar_em_um_item_na_lista_de_termos_buscados() {
+
         // arrange
         searchedDao.add(Searched("car"))
         activityTestRule.launchActivity(nothing)
 
+        // assert
+        Navigation.findNavController(activityTestRule.activity, R.id.fragmentHost).addOnDestinationChangedListener{ _,_,_ ->
+            activityTestRule.activity.intent.extras?.let { bundle ->
+                if(bundle.containsKey(Search::class.java.canonicalName)) {
+                    (bundle.getSerializable(Search::class.java.canonicalName)!! as Search).let { search ->
+                        Assert.assertTrue(search.total != null && search.total!! > 0)
+                    }
+                } else {
+                    Assert.fail()
+                }
+            }
+        }
+
         // action
         onView(withText("car")).perform(click())
-
-        // assert
-        onView(withId(R.id.noResult)).check(matches(Matchers.not(isDisplayed())))
-        onView(withId(R.id.facts)).check(matches(isDisplayed()))
-        onView(withId(R.id.search)).check(matches(isDisplayed()))
     }
 }

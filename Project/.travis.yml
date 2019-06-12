@@ -1,5 +1,5 @@
 os: osx
-anguage: android
+language: android
 dist: trusty
 android:
   components:
@@ -20,4 +20,4 @@ android:
 script:
   — ./gradlew build jacocoTestReport
 after_success:
-  — bash <(curl -s https://codecov.io/bash) -t 82b133d4-3371-4d9a-b720-845121f5ea5d
+  — bash <(curl -s https://codecov.io/bash)

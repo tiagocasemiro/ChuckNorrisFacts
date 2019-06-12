@@ -81,7 +81,6 @@ class SearchFragment : Fragment() {
             false
         }
 
-
         load.show()
 
         return view
