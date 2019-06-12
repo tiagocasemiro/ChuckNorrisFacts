@@ -26,16 +26,10 @@ before_script:
   - adb shell settings put global transition_animation_scale 0 &
   - adb shell settings put global animator_duration_scale 0 &
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-jobs:
-  include:
-    - stage: test
-      name: "Unit Tests"
-      script:
-        - ./gradlew connectedCheck
-        — ./gradlew build jacocoTestReport
-    - stage: androidTest
-      name: "Integration and functional Tests"
-      script: ./gradlew build jacocoTestReport assembleAndroidTest
+script:
+  - ./gradlew connectedCheck
+  — ./gradlew build jacocoTestReport
+  - ./gradlew build jacocoTestReport assembleAndroidTest
 after_success:
   — bash <(curl -s https://codecov.io/bash)
 notifications:
