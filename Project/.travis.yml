@@ -1,5 +1,4 @@
 language: android
-dist: trusty
 android:
   components:
     # The BuildTools version
@@ -17,6 +16,7 @@ android:
     - sys-img-x86-android-26
     - sys-img-armeabi-v7a-android-17
 script:
+  - ./gradlew connectedCheck
   — ./gradlew build jacocoTestReport
 after_success:
   — bash <(curl -s https://codecov.io/bash)
