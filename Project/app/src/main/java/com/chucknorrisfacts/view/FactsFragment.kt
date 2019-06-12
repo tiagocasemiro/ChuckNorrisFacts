@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_facts.view.*
 class FactsFragment : Fragment() {
 
     private var state = State.VISIBLE
+    private val animationTime = 200L
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.fragment_facts, container, false)
@@ -46,12 +47,12 @@ class FactsFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0) {
                     if(state == State.VISIBLE) {
-                        YoYo.with(Techniques.SlideOutDown).duration(200).playOn(view.search)
+                        YoYo.with(Techniques.SlideOutDown).duration(animationTime).playOn(view.search)
                         state = State.HIDDEN
                     }
                 } else {
                     if(state == State.HIDDEN) {
-                        YoYo.with(Techniques.SlideInUp).duration(200).playOn(view.search)
+                        YoYo.with(Techniques.SlideInUp).duration(animationTime).playOn(view.search)
                         state = State.VISIBLE
                     }
                 }

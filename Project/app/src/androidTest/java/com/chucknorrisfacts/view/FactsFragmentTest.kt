@@ -5,7 +5,7 @@ import android.app.Instrumentation
 import android.content.Intent
 import android.os.Bundle
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
@@ -171,5 +171,46 @@ class FactsFragmentTest : KoinTest {
             hasAction(Intent.ACTION_SEND),
             hasExtra(Intent.EXTRA_TEXT, expectedShareUrl)
         ))))
+    }
+
+    @Test
+    fun deve_esconder_botao_buscar_novos_fatos__Quando_escrollar_para_cima() {
+        // arrange
+        val intent = Intent()
+        val arguments = Bundle().apply {
+            putSerializable(Search::class.java.canonicalName, mockSearchFromIntent())
+        }
+        intent.putExtras(arguments)
+
+        // action
+        activityTestRule.launchActivity(intent)
+
+        // assert
+        onView(withId(R.id.search)).check(matches(isDisplayed()))
+
+        // action
+        onView(withId(R.id.facts)).perform(swipeUp())
+
+        // assert
+        onView(withId(R.id.search)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun deve_exibir_botao_buscar_novos_fatos__Quando_escrollar_para_baixo() {
+        // arrange
+        val intent = Intent()
+        val arguments = Bundle().apply {
+            putSerializable(Search::class.java.canonicalName, mockSearchFromIntent())
+        }
+        intent.putExtras(arguments)
+        activityTestRule.launchActivity(intent)
+        onView(withId(R.id.facts)).perform(swipeUp())
+
+        // assert
+        onView(withId(R.id.search)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.facts)).perform(swipeDown())
+
+        // assert
+        onView(withId(R.id.search)).check(matches(isDisplayed()))
     }
 }
