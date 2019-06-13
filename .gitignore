@@ -34,17 +34,17 @@ captures/
 
 # IntelliJ
 *.iml
-/.idea/tasks.xml
-/.idea/gradle.xml
-/.idea/dictionaries
-/.idea/caches
-/.idea/libraries
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-/.idea/modules.xml
-/.idea/vcs.xml
-/.idea/*.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/dictionaries
+.idea/caches
+.idea/libraries
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/*.xml
 
 .DS_Store
 /build
