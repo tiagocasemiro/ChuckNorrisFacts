@@ -201,6 +201,30 @@ class SearchControllerTest {
     }
 
     @Test
+    fun `Deve retornar uma falha - Quando metodo searchWith for chamdo com uma query e um callback de termos buscados`() {
+        // arrange
+        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns GlobalScope.async { Exception() }
+        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { GlobalScope.async { } }
+        every { searchService.searchedsFromDatabaseAsync() } returns GlobalScope.async { Exception() }
+        val searchController = SearchController(searchService)
+        val anyQueryToMock = "any query"
+        val expectedSizeShearteds = 1
+
+        runBlocking {
+            // action
+            searchController.searchWith(anyQueryToMock, {
+                // assert
+                Assert.fail("Busca de fatos deve falhar")
+            }, {
+                // assert
+                Assert.assertTrue(true)
+            }, { searcheds ->
+                Assert.assertEquals(expectedSizeShearteds, searcheds.size)
+            }).join()
+        }
+    }
+
+    @Test
     fun `Deve retornar uma lista de termos buscados nao repetidos - Quando metodo searcheds for chamado`() {
         // arrange
         every { searchService.searchedsFromDatabaseAsync() } returns GlobalScope.async { mockSearchedFromDb() }
