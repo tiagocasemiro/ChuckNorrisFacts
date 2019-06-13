@@ -39,11 +39,11 @@ captures/
 /.idea/dictionaries
 /.idea/caches
 /.idea/libraries
-/.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-/.idea/*.xml
+/.idea/modules.xml
+/.idea/vcs.xml
 /.idea/
 
 .DS_Store
