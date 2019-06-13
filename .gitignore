@@ -44,7 +44,7 @@ captures/
 /.idea/assetWizardSettings.xml
 /.idea/modules.xml
 /.idea/vcs.xml
-/.idea/
+/.idea/*.xml
 
 .DS_Store
 /build
