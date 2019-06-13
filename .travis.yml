@@ -34,8 +34,7 @@ jobs:
     - stage: androidTest
       script:
         - ./gradlew connectedCheck
-        — ./gradlew build jacocoTestReport
-        - ./gradlew build jacocoTestReport assembleAndroidTest
+        - ./gradlew build jacocoTestReportA
 after_success:
   — bash <(curl -s https://codecov.io/bash)
 notifications:
