@@ -1,4 +1,5 @@
 language: android
+install: true
 dist: trusty
 jdk: oraclejdk8
 env:
@@ -38,7 +39,9 @@ jobs:
   include:
     - stage: test
       script:
-        - ./gradlew jacocoTestReport
+        - ./gradlew clean
+        - ./gradlew build
+        - ./gradlew build connectedCheck
     - stage: androidTest
       script:
         - ./gradlew connectedCheck
