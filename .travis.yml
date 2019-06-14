@@ -37,6 +37,7 @@ jobs:
   include:
     - stage: prepare
       script:
+        - ./gradlew check
         - ./gradlew clean testDebug lintDebug jacocoDebugReport coveralls --scan --stacktrace
     - stage: test
       script:
