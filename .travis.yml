@@ -43,7 +43,7 @@ licenses:
 before_script:
  # - echo no | android create avd --force -n test -t "android-21" --abi $ANDROID_ABI --tag $ANDROID_TAG
   - echo no | android create avd --force -n test -t "android-"$ANDROID_API_LEVEL --abi $ANDROID_ABI --tag $ANDROID_TAG
-  - emulator -avd test -no-window -gpu off &
+  - emulator -avd test -no-window -wipe-data -gpu off &
   - android-wait-for-emulator
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 jobs:
@@ -73,4 +73,3 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
