@@ -24,6 +24,7 @@ android:
     - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
     - sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
 before_install:
+  - gradle wrapper
   - chmod +x gradlew
   - pip install
 before_script:
@@ -31,9 +32,15 @@ before_script:
   - emulator -avd test -no-window -no-boot-anim &
   - android-wait-for-emulator
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-script:
-  - ./gradlew connectedCheck
-  - ./gradlew build jacocoTestReport
+jobs:
+  include:
+    - stage: test
+      script:
+        - ./gradlew test
+    - stage: androidTest
+      script:
+        - ./gradlew connectedCheck
+        - ./gradlew build jacocoTestReport
 after_success:
   — bash <(curl -s https://codecov.io/bash)
   - codecov
