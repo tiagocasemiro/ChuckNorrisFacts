@@ -41,22 +41,20 @@ licenses:
   - android-sdk-license-.+
   - google-gdk-license-.+
 before_script:
- # - echo no | android create avd --force -n test -t "android-21" --abi $ANDROID_ABI --tag $ANDROID_TAG
   - echo no | android create avd --force -n test -t "android-"$ANDROID_API_LEVEL --abi $ANDROID_ABI --tag $ANDROID_TAG
   - emulator -avd test -no-window -wipe-data -gpu off &
   - android-wait-for-emulator
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 jobs:
   include:
-#    - stage: test
-#      script:
-#        - ./gradlew test
+    - stage: test
+     script:
+       - ./gradlew test
     - stage: androidTest
       script:
         - travis_wait 30 ./gradlew build jacocoTestReport
 after_success:
   — bash <(curl -s https://codecov.io/bash)
-  - codecov
 notifications:
   email:
     recipients:
