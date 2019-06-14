@@ -30,7 +30,8 @@ before_install:
   - source "/home/travis/.sdkman/bin/sdkman-init.sh"
   - sdk install gradle 5.1.1
   - gradle wrapper --gradle-version 5.1.1 --info
-  - yes | sdkmanager $ANDROID_TARGET
+  - yes | sdkmanager "platforms;"${ANDROID_TARGET}
+  - yes | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION"
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
   - pip install
