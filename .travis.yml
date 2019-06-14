@@ -48,8 +48,8 @@ before_script:
 jobs:
   include:
     - stage: test
-     script:
-       - ./gradlew test
+      script:
+        - ./gradlew test
     - stage: androidTest
       script:
         - travis_wait 30 ./gradlew build jacocoTestReport
