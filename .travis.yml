@@ -10,11 +10,9 @@ env:
     - ANDROID_BUILD_TOOLS_VERSION=21.1.2
 android:
   components:
-    - yes | sdkmanager tools
-    - yes | sdkmanager platform-tools
-    - yes | sdkmanager $ANDROID_TARGET
-    - yes | sdkmanager --update
-    - yes | sdkmanager --licenses
+    - tools
+    - platform-tools
+    - $ANDROID_TARGET
     - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
     - android-$ANDROID_API_LEVEL
@@ -36,13 +34,9 @@ before_script:
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 jobs:
   include:
-    - stage: prepare
-      script:
-        - ./gradlew check
-        - ./gradlew clean testDebug lintDebug jacocoDebugReport coveralls --scan --stacktrace
     - stage: test
       script:
-        - ./gradlew test
+        - ./gradlew test --scan
     - stage: androidTest
       script:
         - ./gradlew connectedCheck
