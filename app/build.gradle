@@ -8,6 +8,10 @@ apply plugin: 'jacoco-android'
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'

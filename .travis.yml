@@ -25,6 +25,7 @@ android:
     - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
     - sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
 before_install:
+  - gradle wrapper --info
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
   - pip install
