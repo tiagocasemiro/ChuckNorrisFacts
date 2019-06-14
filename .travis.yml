@@ -10,9 +10,11 @@ env:
     - ANDROID_BUILD_TOOLS_VERSION=21.1.2
 android:
   components:
-    - tools
-    - platform-tools
-    - $ANDROID_TARGET
+    - yes | sdkmanager tools
+    - yes | sdkmanager platform-tools
+    - yes | sdkmanager $ANDROID_TARGET
+    - yes | sdkmanager --update
+    - yes | sdkmanager --licenses
     - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
     - android-$ANDROID_API_LEVEL
@@ -23,7 +25,6 @@ android:
     - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
     - sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
 before_install:
-  - gradle wrapper
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
   - pip install
@@ -34,6 +35,9 @@ before_script:
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 jobs:
   include:
+    - stage: prepare
+      script:
+        - ./gradlew clean testDebug lintDebug jacocoDebugReport coveralls --scan --stacktrace
     - stage: test
       script:
         - ./gradlew test
@@ -51,3 +55,12 @@ notifications:
       - tiagopaivacasemiro@gmail.com
     on_success: always
     on_failure: never
+sudo: false
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
