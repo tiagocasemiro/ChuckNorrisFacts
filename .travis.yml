@@ -26,6 +26,7 @@ android:
 before_install:
   - gradle wrapper
   - chmod +x gradlew
+  - chmod +x gradle/wrapper/gradle-wrapper.jar
   - pip install
 before_script:
   - echo no | android create avd --force -n test -t "android-21" --abi $ANDROID_ABI --tag $ANDROID_TAG
