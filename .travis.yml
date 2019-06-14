@@ -6,8 +6,9 @@ env:
     - ANDROID_TARGET=android-28
     - ANDROID_ABI=armeabi-v7a
     - ANDROID_TAG=google_apis
-    - ANDROID_API_LEVEL=28
+    - ANDROID_API_LEVEL=21
     - ANDROID_BUILD_TOOLS_VERSION=28.0.3
+    - ADB_INSTALL_TIMEOUT=10
 android:
   components:
     - tools
@@ -46,9 +47,11 @@ before_script:
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 jobs:
   include:
-    - stage: all test
+    - stage: test
       script:
         - ./gradlew test
+    - stage: androidTest
+      script:
         - ./gradlew connectedCheck
         - ./gradlew build jacocoTestReport
 after_success:
@@ -62,3 +65,11 @@ notifications:
     on_success: always
     on_failure: never
 sudo: false
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
