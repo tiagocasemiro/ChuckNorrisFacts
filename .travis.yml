@@ -39,9 +39,7 @@ jobs:
   include:
     - stage: test
       script:
-        - ./gradlew clean
-        - ./gradlew build
-        - ./gradlew build connectedCheck
+        - gradle build connectedCheck
     - stage: androidTest
       script:
         - ./gradlew connectedCheck
