@@ -22,6 +22,13 @@ android:
     - sys-img-x86-android-$ANDROID_API_LEVEL
     - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
     - sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
+install: true
+script:
+  - curl -s get.sdkman.io | bash
+  - source "$HOME/.sdkman/bin/sdkman-init.sh"
+  - echo sdkman_auto_answer=true > ~/.sdkman/etc/config
+  - source "/home/travis/.sdkman/bin/sdkman-init.sh"
+  - sdk install gradle 5.1.1
 before_install:
   - gradle wrapper --gradle-version 5.1.1 --info
   - chmod +x gradlew
