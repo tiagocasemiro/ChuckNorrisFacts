@@ -23,6 +23,7 @@ android:
     - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
     - sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
 before_install:
+  - gradle wrapper
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
   - pip install
@@ -48,5 +49,5 @@ notifications:
     recipients:
       - tiagocasemiro@hotmail.com
       - tiagopaivacasemiro@gmail.com
-    on_success: never
-    on_failure: always
+    on_success: always
+    on_failure: never
