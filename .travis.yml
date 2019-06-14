@@ -1,4 +1,3 @@
-install: gradle wrapper --gradle-version 5.1.1
 language: android
 dist: trusty
 jdk: oraclejdk8
