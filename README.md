@@ -61,9 +61,9 @@ $ bash <(curl -s https://codecov.io/bash) -t  82b133d4-3371-4d9a-b720-845121f5ea
 
 A code quality analysis is done at each commit / pull request in the master. The application's GPA is 3.73 of 4.0 <BR/>
 
-Look at other famous open source projects, [https://codebeat.co/open-source/](https://codebeat.co/open-source/)<BR/>
+Look at other famous open source projects [https://codebeat.co/open-source/](https://codebeat.co/open-source/).<BR/>
 
-Learn more about GPA, [https://hub.codebeat.co/docs/gpa-explained](https://hub.codebeat.co/docs/gpa-explained)<BR/>
+Learn more about GPA [https://hub.codebeat.co/docs/gpa-explained](https://hub.codebeat.co/docs/gpa-explained).<BR/>
 <BR/> 
 <BR/> 
 
@@ -93,5 +93,5 @@ If you use the local mock. When starting the server, the ip of the created serve
 Copy this ip and put in the String HOST configured in the gradle of the App Mole.<BR/>
 ```
 // Example: 
-buildConfigField("String", "HOST", "http:// <<<Enter here your ip>>>: 8080")
+buildConfigField("String", "HOST", "http://<<<Enter here your ip>>>: 8080")
 ```
