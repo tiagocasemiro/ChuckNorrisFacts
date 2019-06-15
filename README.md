@@ -1,5 +1,5 @@
 
-![Chuck Norris](./header.jpeg)
+<img alt="Chuck Norris" src="./header.jpeg" style="width: 100%;">
 
 [![Travis CI badge](https://img.shields.io/travis/tiagocasemiro/ChuckNorrisFacts.svg?label=Travis%20CI&style=flat)](https://codecov.io/gh/tiagocasemiro/ChuckNorrisFacts)&nbsp;&nbsp;
 [![Codecov badge](https://img.shields.io/codecov/c/github/tiagocasemiro/ChuckNorrisFacts.svg?style=flat)](https://codecov.io/gh/tiagocasemiro/ChuckNorrisFacts)&nbsp;&nbsp;
@@ -49,11 +49,15 @@ The entire **commit / pull request** in the Master branche will execute all the 
 When a **commit / pull request** changes the code coverage scenario, a bot comments with an updated coverage report.<BR/>
 
 To run the tests manually, follow these steps on the terminal<BR/>
-*./gradlew test*<BR/>
-*./gradlew build jacocoTestReport*<BR/>
+```sh
+$ ./gradlew test
+$ ./gradlew build jacocoTestReport
+```
 
 To manually upload test results.<BR/>
-*bash <(curl -s https://codecov.io/bash) -t  82b133d4-3371-4d9a-b720-845121f5ea5d* <BR/>
+```sh
+$ bash <(curl -s https://codecov.io/bash) -t  82b133d4-3371-4d9a-b720-845121f5ea5d
+```
 
 A code quality analysis is done at each commit / pull request in the master. The application's GPA is 3.73 of 4.0 <BR/>
 
