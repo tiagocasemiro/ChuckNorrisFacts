@@ -1,18 +1,38 @@
-# ChuckNorrisFacts
+![Build passing](https://travis-ci.com/tiagocasemiro/ChuckNorrisFacts.svg?branch=master)
 
-### Build pass on Travis CI
-https://travis-ci.com/tiagocasemiro/ChuckNorrisFacts.svg?branch=master
+# ChuckNorrisFacts  
 
+#### DevOps integrations
 
-Coder analyzer
-https://codebeat.co/projects/github-com-tiagocasemiro-chucknorrisfacts-feature-create-project/
+**codebeat** - Coder analyzer <BR/>
+<https://codebeat.co/projects/github-com-tiagocasemiro-chucknorrisfacts-feature-create-project>
 
-Coverage dash
-https://codecov.io/gh/tiagocasemiro/ChuckNorrisFacts
+**codecov** - Coverage dashboard<BR/>
+<https://codecov.io/gh/tiagocasemiro/ChuckNorrisFacts>
 
-Continuos integration
-https://travis-ci.com/tiagocasemiro/ChuckNorrisFacts
+**travis CI** - Continuos integration<BR/>
+<https://travis-ci.com/tiagocasemiro/ChuckNorrisFacts>
 
-Gradle scan
-https://scans.gradle.com/s/2qu66ijnw4vpm
+**Gradle scans** - Build analyzer<BR/>
+<https://scans.gradle.com/s/2qu66ijnw4vpm>
 
+**Crashilytics** - Crash report<BR/>
+<https://fabric.io/tiago-casemiros-projects/android/apps/com.chucknorrisfacts/dashboard>
+
+#### Architecture
+
+#### Tests
+
+#### Stack
++ **Koin** - Injection dependency
++ **Roon** - Orm local repository
++ **Retrofit** - Rest api client
++ **Kotlin corotines** - Threads manager
++ **Navegation fragment** - Navegation ui 
++ **Android View Animations** -  Animations
++ **Crashlytics** - Crash report
++ **Material design components** - Components ui
++ **Androidx emoj** -Emojs
+   
+
+#### Build

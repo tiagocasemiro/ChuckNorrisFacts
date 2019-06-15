@@ -60,8 +60,8 @@ notifications:
     recipients:
       - tiagocasemiro@hotmail.com
       - tiagopaivacasemiro@gmail.com
-    on_success: always
-    on_failure: never
+    on_success: never
+    on_failure: always
 sudo: false
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
