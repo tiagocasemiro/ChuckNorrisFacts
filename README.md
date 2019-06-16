@@ -32,7 +32,7 @@
 **Base architecture ( Model View Controller )**<BR/>
 The base architecture of the application is the MVC, packet-segmented.<BR/>
 
-Possessing 3 composite modules as follows. **App** contains **Domain** and **MOC** contains **Domain**.<BR/>
+Possessing 3 composite modules as follows. **App** contains **Domain** and **Mock** contains **Domain**.<BR/>
 In the context of functional testing the **App** module contains the **Mock** module to have the ability to generate test jsons.<BR/>
 
 All tests are independent of the external environment, including the integration tests.<BR/>
@@ -43,6 +43,10 @@ In order to make the integration tests independent, the Room was instantiated wi
 
 #### Tests and Quality code
 
+The tests are separated into 3 different source sets.<BR/>
+Unit test are in sourceSet ** test **, integrated tests are in the sourceSet ** integrationTest ** and functional tests are in source set androidTest.<BR/>
+To run the built-in tests, an instance of the andorid context is required. So this test has a sourceSet of type androidTest.<BR/>
+
 All tests were applied without interference from the external environment (App database on smartphone, Application server running), as explained above.<BR/>
 
 The entire **commit / pull request** in the Master branche will execute all the tests of the application.<BR/>
@@ -50,7 +54,10 @@ When a **commit / pull request** changes the code coverage scenario, a bot comme
 
 To run the tests manually, follow these steps on the terminal<BR/>
 ```sh
-$ ./gradlew test
+// unit test
+$ ./gradlew test  
+
+// funcional end integration test
 $ ./gradlew build jacocoTestReport
 ```
 
@@ -67,7 +74,7 @@ Learn more about GPA [https://hub.codebeat.co/docs/gpa-explained](https://hub.co
 <BR/> 
 <BR/> 
 
-#### Stack
+#### Stack frameworks
 + **Koin** - Injection dependency
 + **Roon** - Orm local repository
 + **Retrofit** - Rest api client
@@ -90,8 +97,8 @@ Learn more about GPA [https://hub.codebeat.co/docs/gpa-explained](https://hub.co
 + Kotlin version 1.3.31
 
 If you use the local mock. When starting the server, the ip of the created server will be printed on the console.<BR/>
-Copy this ip and put in the String HOST configured in the gradle of the App Mole.<BR/>
+Copy this ip and put in the String HOST configured in the gradle of the App Module.<BR/>
 ```
 // Example: 
-buildConfigField("String", "HOST", "http://<<<Enter here your ip>>>: 8080")
+buildConfigField("String", "HOST", "http://<<<Enter here your IP>>>: 8080")
 ```
