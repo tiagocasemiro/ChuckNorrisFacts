@@ -47,6 +47,8 @@ The tests are separated into 3 different source sets.<BR/>
 Unit test are in sourceSet ** test **, integrated tests are in the sourceSet ** integrationTest ** and functional tests are in source set androidTest.<BR/>
 To run the built-in tests, an instance of the andorid context is required. So this test has a sourceSet of type androidTest.<BR/>
 
+Every day runs all tests automatically. If a test fails, an email is sent with the failure report.<BR/>
+
 All tests were applied without interference from the external environment (App database on smartphone, Application server running), as explained above.<BR/>
 
 The entire **commit / pull request** in the Master branche will execute all the tests of the application.<BR/>
