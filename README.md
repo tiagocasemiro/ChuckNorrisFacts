@@ -44,7 +44,7 @@ In order to make the integration tests independent, the Room was instantiated wi
 #### Tests and Quality code
 
 The tests are separated into 3 different source sets.<BR/>
-Unit test are in sourceSet ** test **, integrated tests are in the sourceSet ** integrationTest ** and functional tests are in source set androidTest.<BR/>
+Unit test are in sourceSet **test**, integrated tests are in the sourceSet **integrationTest** and functional tests are in source set androidTest.<BR/>
 To run the built-in tests, an instance of the andorid context is required. So this test has a sourceSet of type androidTest.<BR/>
 
 Every day runs all tests automatically. If a test fails, an email is sent with the failure report.<BR/>
