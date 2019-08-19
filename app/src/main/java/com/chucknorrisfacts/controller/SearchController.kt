@@ -6,12 +6,14 @@ import com.chucknorrisfacts.model.service.SearchService
 import com.domain.Category
 import com.domain.Search
 import com.domain.Searched
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 
 class SearchController(private val searchService: SearchService) {
 
-    fun categories(success: (categories: List<Category>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
+    fun categories(success: (categories: List<Category>) -> Unit, fail: () -> Unit) = CoroutineScope(Job()).launch {
         searchService.categoriesFromDatabaseAsync().await().let { categoriesFromDb ->
             if (categoriesFromDb is List<*> && categoriesFromDb.isNotEmpty()) {
                 success((categoriesFromDb).map { category -> category as Category }.toList().shuffledAndSlice())
@@ -28,7 +30,7 @@ class SearchController(private val searchService: SearchService) {
         }
     }
 
-    fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit) = GlobalScope.launch {
+    fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit) = CoroutineScope(Job()).launch {
         when (val objectReturned = searchService.searchWithQueryFromRemoteApiAsync(query).await()) {
             is Search -> {
                 success(objectReturned)
@@ -41,7 +43,7 @@ class SearchController(private val searchService: SearchService) {
     }
 
     fun searchWith(query: String, success: (search: Search) -> Unit, fail: () -> Unit,
-                   successSearcheds : (searcheds: List<Searched>) -> Unit) = GlobalScope.launch {
+                   successSearcheds : (searcheds: List<Searched>) -> Unit) = CoroutineScope(Job()).launch {
         when (val objectReturned = searchService.searchedsFromDatabaseAsync().await()) {
             is List<*> -> {
                 val searcheds = objectReturned.map { it as Searched }.toMutableList()
@@ -57,7 +59,7 @@ class SearchController(private val searchService: SearchService) {
         this@SearchController.searchWith(query, success, fail)
     }
 
-    fun searcheds(success: (facts: List<Searched>) -> Unit, fail: () -> Unit) = GlobalScope.launch {
+    fun searcheds(success: (facts: List<Searched>) -> Unit, fail: () -> Unit) = CoroutineScope(Job()).launch {
         when (val objectReturned = searchService.searchedsFromDatabaseAsync().await()) {
             is List<*> -> {
                 success(objectReturned.map { it as Searched }.toList().reversed())

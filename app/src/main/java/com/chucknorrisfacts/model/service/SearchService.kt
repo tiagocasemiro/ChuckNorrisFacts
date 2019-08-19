@@ -6,14 +6,12 @@ import com.chucknorrisfacts.model.repository.local.SearchedDao
 import com.chucknorrisfacts.model.repository.remote.ClientApi
 import com.domain.Category
 import com.domain.Searched
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 
 
 class SearchService(private val clientApi: ClientApi, private val searchedDao: SearchedDao, private val categoryDao: CategoryDao) {
 
-    fun categoriesFromRemoteApiAsync() = GlobalScope.async(Dispatchers.IO) {
+    fun categoriesFromRemoteApiAsync() = CoroutineScope(Job()).async(Dispatchers.IO) {
         try {
             val response = clientApi.categories().execute()
             if (response.isSuccessful)
@@ -27,7 +25,7 @@ class SearchService(private val clientApi: ClientApi, private val searchedDao: S
         }
     }
 
-    fun searchWithQueryFromRemoteApiAsync(query: String) = GlobalScope.async(Dispatchers.IO) {
+    fun searchWithQueryFromRemoteApiAsync(query: String) = CoroutineScope(Job()).async(Dispatchers.IO) {
         try {
             val response = clientApi.search(query).execute()
             if (response.isSuccessful)
@@ -41,7 +39,7 @@ class SearchService(private val clientApi: ClientApi, private val searchedDao: S
         }
     }
 
-    fun categoriesFromDatabaseAsync() = GlobalScope.async(Dispatchers.IO) {
+    fun categoriesFromDatabaseAsync() = CoroutineScope(Job()).async(Dispatchers.IO) {
         return@async try {
             categoryDao.all()
         } catch (exception: Exception) {
@@ -50,7 +48,7 @@ class SearchService(private val clientApi: ClientApi, private val searchedDao: S
         }
     }
 
-    fun searchedsFromDatabaseAsync() = GlobalScope.async(Dispatchers.IO)  {
+    fun searchedsFromDatabaseAsync() = CoroutineScope(Job()).async(Dispatchers.IO)  {
         try {
             return@async searchedDao.all()
         } catch (e: Exception) {
@@ -59,7 +57,7 @@ class SearchService(private val clientApi: ClientApi, private val searchedDao: S
         }
     }
 
-    fun saveOnDatabaseAsync(categories: List<*>) = GlobalScope.async(Dispatchers.IO) {
+    fun saveOnDatabaseAsync(categories: List<*>) = CoroutineScope(Job()).async(Dispatchers.IO) {
         try {
             categories.forEach {
                 categoryDao.add(Category(it as String))
@@ -69,7 +67,7 @@ class SearchService(private val clientApi: ClientApi, private val searchedDao: S
         }
     }
 
-    fun saveOnDatabaseAsync(query: String) = GlobalScope.async(Dispatchers.IO) {
+    fun saveOnDatabaseAsync(query: String) = CoroutineScope(Job()).async(Dispatchers.IO) {
         try {
             searchedDao.add(Searched(query))
         } catch (e: Exception) {
