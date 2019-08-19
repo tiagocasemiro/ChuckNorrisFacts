@@ -10,9 +10,7 @@ import com.google.gson.GsonBuilder
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -34,8 +32,8 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma lista com 8 categorias aleatorias do banco - Quando metodo categories for chamado`() {
         // arrange
-        every { searchService.categoriesFromDatabaseAsync() } returns GlobalScope.async { mockCategoriesFromDb() }
-        every { searchService.categoriesFromRemoteApiAsync() } answers { GlobalScope.async {
+        every { searchService.categoriesFromDatabaseAsync() } returns CoroutineScope(Job()).async { mockCategoriesFromDb() }
+        every { searchService.categoriesFromRemoteApiAsync() } answers { CoroutineScope(Job()).async {
             Assert.fail("Busca no banco local falhou")
         } }
         val expectNumberOfCategories = 8
@@ -58,9 +56,9 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma lista com 8 categorias aleatorias da api - Quando metodo categories for chamado e busca no banco falhar`() {
         // arrange
-        every { searchService.categoriesFromDatabaseAsync() } returns GlobalScope.async { Exception() }
-        every { searchService.categoriesFromRemoteApiAsync() } answers { GlobalScope.async { mockCategoriesFromApi() }}
-        every { searchService.saveOnDatabaseAsync(any<List<*>>()) } answers { GlobalScope.async {  } }
+        every { searchService.categoriesFromDatabaseAsync() } returns CoroutineScope(Job()).async { Exception() }
+        every { searchService.categoriesFromRemoteApiAsync() } answers { CoroutineScope(Job()).async { mockCategoriesFromApi() }}
+        every { searchService.saveOnDatabaseAsync(any<List<*>>()) } answers { CoroutineScope(Job()).async {  } }
 
         val expectNumberOfCategories = 8
         val noExpectedArray = mockCategoriesFromDb().slice(0..7)
@@ -82,8 +80,8 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar falha - Quando metodo categories falhar nas buscas no banco e na api`() {
         // arrange
-        every { searchService.categoriesFromDatabaseAsync() } returns GlobalScope.async { Exception() }
-        every { searchService.categoriesFromRemoteApiAsync() } answers { GlobalScope.async { Exception() } }
+        every { searchService.categoriesFromDatabaseAsync() } returns CoroutineScope(Job()).async { Exception() }
+        every { searchService.categoriesFromRemoteApiAsync() } answers { CoroutineScope(Job()).async { Exception() } }
 
         val searchController = SearchController(searchService)
 
@@ -102,8 +100,8 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma lista de Fatos - Quando metodo searchWith for chamdo com uma query`() {
         // arrange
-        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns GlobalScope.async {  mockSearchFromApi() }
-        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { GlobalScope.async { } }
+        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns CoroutineScope(Job()).async {  mockSearchFromApi() }
+        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { CoroutineScope(Job()).async { } }
         val searchController = SearchController(searchService)
         val expectedNumberOfFacts = 4
         val anyQueryToMock = "any query"
@@ -123,9 +121,9 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma lista de Fatos e uma lista de termos buscados nao duplicados e em ordem reversa - Quando metodo searchWith for chamdo com uma query que ja foi buscada`() {
         // arrange
-        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns GlobalScope.async {  mockSearchFromApi() }
-        every { searchService.searchedsFromDatabaseAsync() } returns GlobalScope.async { mockSearchedFromDb() }
-        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { GlobalScope.async { } }
+        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns CoroutineScope(Job()).async {  mockSearchFromApi() }
+        every { searchService.searchedsFromDatabaseAsync() } returns CoroutineScope(Job()).async { mockSearchedFromDb() }
+        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { CoroutineScope(Job()).async { } }
         val searchController = SearchController(searchService)
         val expectedNumberOfFacts = 4
         val expectedNumberOfSearcheds = 6
@@ -151,9 +149,9 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma lista de Fatos e uma lista de termos buscados nao duplicados e em ordem reversa - Quando metodo searchWith for chamdo com uma query que nao foi buscada`() {
         // arrange
-        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns GlobalScope.async {  mockSearchFromApi() }
-        every { searchService.searchedsFromDatabaseAsync() } returns GlobalScope.async { mockSearchedFromDb() }
-        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { GlobalScope.async { } }
+        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns CoroutineScope(Job()).async {  mockSearchFromApi() }
+        every { searchService.searchedsFromDatabaseAsync() } returns CoroutineScope(Job()).async { mockSearchedFromDb() }
+        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { CoroutineScope(Job()).async { } }
         val searchController = SearchController(searchService)
         val query = "pop star"
         val expectedNumberOfFacts = 4
@@ -183,8 +181,8 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma falha - Quando metodo searchWith for chamdo com uma query`() {
         // arrange
-        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns GlobalScope.async { Exception() }
-        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { GlobalScope.async { } }
+        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns CoroutineScope(Job()).async { Exception() }
+        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { CoroutineScope(Job()).async { } }
         val searchController = SearchController(searchService)
         val anyQueryToMock = "any query"
 
@@ -203,9 +201,9 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma falha - Quando metodo searchWith for chamdo com uma query e um callback de termos buscados`() {
         // arrange
-        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns GlobalScope.async { Exception() }
-        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { GlobalScope.async { } }
-        every { searchService.searchedsFromDatabaseAsync() } returns GlobalScope.async { Exception() }
+        every { searchService.searchWithQueryFromRemoteApiAsync(any()) } returns CoroutineScope(Job()).async { Exception() }
+        every { searchService.saveOnDatabaseAsync(any<String>()) } answers { CoroutineScope(Job()).async { } }
+        every { searchService.searchedsFromDatabaseAsync() } returns CoroutineScope(Job()).async { Exception() }
         val searchController = SearchController(searchService)
         val anyQueryToMock = "any query"
         val expectedSizeShearteds = 1
@@ -227,7 +225,7 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma lista de termos buscados nao repetidos - Quando metodo searcheds for chamado`() {
         // arrange
-        every { searchService.searchedsFromDatabaseAsync() } returns GlobalScope.async { mockSearchedFromDb() }
+        every { searchService.searchedsFromDatabaseAsync() } returns CoroutineScope(Job()).async { mockSearchedFromDb() }
         val searchController = SearchController(searchService)
         val expectedNumberOfSearcheds = 6
         val expectedDuplicationElements = 0
@@ -250,7 +248,7 @@ class SearchControllerTest {
     @Test
     fun `Deve retornar uma lista de termos buscados em ordem reversa - Quando metodo searcheds for chamado`() {
         // arrange
-        every { searchService.searchedsFromDatabaseAsync() } returns GlobalScope.async { mockSearchedFromDb() }
+        every { searchService.searchedsFromDatabaseAsync() } returns CoroutineScope(Job()).async { mockSearchedFromDb() }
         val searchController = SearchController(searchService)
         val expectedNumberOfSearcheds = 6
         val expectedReversedArray = mockSearchedFromDb().reversed()
@@ -273,7 +271,7 @@ class SearchControllerTest {
     @Test
     fun `Deve falhar - Quando metodo searcheds for chamado`() {
         // arrange
-        every { searchService.searchedsFromDatabaseAsync() } returns GlobalScope.async { Exception() }
+        every { searchService.searchedsFromDatabaseAsync() } returns CoroutineScope(Job()).async { Exception() }
         val searchController = SearchController(searchService)
 
         runBlocking {

@@ -26,10 +26,7 @@ import com.domain.Searched
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 
 
@@ -92,7 +89,7 @@ class SearchFragment : Fragment() {
     }
 
     private val loadSearcheds : (searcheds: List<Searched>) -> Unit = { searcheds ->
-        GlobalScope.launch {
+        CoroutineScope(Job()).launch {
             withContext(Dispatchers.Main) {
                 val list = searcheds.distinctBy { Pair(it.query, it.query) }.map { it.query }.toList()
 
@@ -116,7 +113,7 @@ class SearchFragment : Fragment() {
     }
 
     private val loadFacts : (search: Search) -> Unit = { search ->
-        GlobalScope.launch {
+        CoroutineScope(Job()).launch {
             withContext(Dispatchers.Main) {
                 val arguments = Bundle().apply {
                     putSerializable(Search::class.java.canonicalName, search)
@@ -129,7 +126,7 @@ class SearchFragment : Fragment() {
     }
 
     private val loadCategories : (categories: List<Category>) -> Unit = { categories ->
-        GlobalScope.launch {
+        CoroutineScope(Job()).launch {
             withContext(Dispatchers.Main) {
                 categories.forEach { category ->
                     val chip = Chip(context, null, R.attr.chipStyle)
@@ -155,7 +152,7 @@ class SearchFragment : Fragment() {
     }
 
     private val failToLoadData : () -> Unit = {
-        GlobalScope.launch {
+        CoroutineScope(Job()).launch {
             withContext(Dispatchers.Main) {
                 val alert = AlertDialog.Builder(context!!)
                     .setMessage(context!!.getString(R.string.message_fail_load_data))
@@ -167,7 +164,7 @@ class SearchFragment : Fragment() {
     }
 
     private val noConnection : () -> Unit = {
-        GlobalScope.launch {
+        CoroutineScope(Job()).launch {
             withContext(Dispatchers.Main) {
                 val alert = AlertDialog.Builder(context!!)
                     .setMessage(context!!.getString(R.string.message_no_connection))
@@ -179,7 +176,7 @@ class SearchFragment : Fragment() {
     }
 
     private val noResult : () -> Unit = {
-        GlobalScope.launch {
+        CoroutineScope(Job()).launch {
             withContext(Dispatchers.Main) {
                 val arguments = Bundle().apply {
                     putSerializable(Search::class.java.canonicalName, Search().emptySeach())
